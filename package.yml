@@ -1,6 +1,6 @@
 package: poll
 version: '1.0'
-author: Jan Kristinus
+author: Friends Of REDAXO
 supportpage: www.github.org/friendsofredaxo/poll
 
 page:
