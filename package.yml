@@ -1,0 +1,16 @@
+package: poll
+version: '1.0'
+author: Jan Kristinus
+supportpage: www.github.org/friendsofredaxo/poll
+
+page:
+    title: translate:poll
+    pjax: true
+    subpages:
+        main: { title: 'translate:poll_main' }
+        statistic: { title: 'translate:poll_statistic' }
+
+requires:
+    packages:
+        yform: '^2.2'
+    redaxo: '^5.3'

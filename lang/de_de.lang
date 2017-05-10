@@ -1,0 +1,28 @@
+poll = Umfrage
+navigation_poll = Umfrage
+
+poll_main = Umfragen
+poll_statistic = Statistiken
+poll_options = Umfrage Optionen
+poll_option = Option
+poll_error_pleasechooseapoll = Bitte eine Umfrage auswählen
+
+poll_title = Umfrage
+poll_online = Online
+
+poll_showresult = Ergebnis anzeigen
+
+poll_result_always = immer
+poll_result_ifvoted = wenn gevoted wurde
+poll_result_never = nie
+poll_result_ifended = wenn Umfrage beendet
+
+
+poll_votes = Umfragen Einträge
+poll_create_datetime = Erstellungsdatum
+poll_userhash = Userhash (Kennung)
+
+
+ip = IP
+
+poll_module = Umfrage Modul
