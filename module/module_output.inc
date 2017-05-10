@@ -33,10 +33,12 @@ if ($poll) {
         $li = [];
         foreach ($poll->getOptions() as $option) {
             $hits = $option->getHits();
+            $showpercent = 1;
             $percent = (int) ($hits / $hits_all * 100);
-            $li[] = '<li>'.$option->title.' / '.$option->getHits().' Klicks / '.$percent.'%</li>';
+            if ($percent > 1) $showpercent = $percent;
+            $li[] = '<li>'.$option->title.' <span class="poll-balken" style="width:'.$showpercent.'px;background-color:#f90; display:inline-block; height:13px; margin:0px 5px;"></span>'.$percent.'% ['.$option->getHits().']</li>';
         }
-        echo '<h3>Ergebnisse:</h2><ul>'.implode('', $li).'</ul>';
+        echo '<h3>Ergebnis:</h2><ul>'.implode('', $li).'</ul>';
     }
     echo '</div>';
 }
