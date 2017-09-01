@@ -4,10 +4,12 @@ author: Friends Of REDAXO
 supportpage: www.github.org/friendsofredaxo/poll
 
 page:
-    title: translate:poll
+    title: translate:poll_settings
     pjax: true
+    block: poll
+    icon: rex-icon fa-hand-spock-o
     subpages:
-        main: { title: 'translate:poll_main' }
+        main: { title: 'translate:poll_settings' }
         statistic: { title: 'translate:poll_statistic' }
 
 requires:
