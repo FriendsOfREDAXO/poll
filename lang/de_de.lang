@@ -6,9 +6,18 @@ poll_statistic = Statistiken
 poll_options = Umfrage Optionen
 poll_option = Option
 poll_error_pleasechooseapoll = Bitte eine Umfrage auswählen
+poll_option_image = Bild
+poll_option_description = Beschreibung
+poll_option_link = Link
+poll_option_link_info = inkl. http://
+
+
 
 poll_title = Umfrage
 poll_online = Online
+poll_type = Umfragetyp
+poll_type_direct = Umfrage direkt
+poll_type_email = Umfrage mit E-Mail Bestätigung
 
 poll_showresult = Ergebnis anzeigen
 
@@ -17,11 +26,11 @@ poll_result_ifvoted = wenn gevoted wurde
 poll_result_never = nie
 poll_result_ifended = wenn Umfrage beendet
 
-
 poll_votes = Umfragen Einträge
 poll_create_datetime = Erstellungsdatum
 poll_userhash = Userhash (Kennung)
 
+poll_settings = Einstellungen
 
 ip = IP
 
