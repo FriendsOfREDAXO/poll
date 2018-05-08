@@ -27,57 +27,59 @@ class rex_poll extends \rex_yform_manager_dataset
         return $hits;
     }
 
-    public function executeVote()
+    public function executeVote($option_id,$status)
     {
         if ($this->status == 0) {
             return false;
         }
 
-        if (rex_poll_user::hasVoted($this)) {
+        if (rex_poll_user::getVote($this,rex_poll_user::getHash())) {
             return false;
         }
 
-            // rex_poll[poll_id] = vote_id
-            $votes = rex_request::get('rex_poll', 'array');
-        if (count($votes) == 1) {
-            foreach ($votes as $poll_id => $vote_id) {
-                if ($poll_id == $this->id && $this->checkOptionById($vote_id)) {
-                    $post = rex_poll_vote::create();
-                    $post->poll_id = $this->id;
-                    $post->option_id = (int) $vote_id;
-                    $post->ip = $_SERVER['REMOTE_ADDR'];
-                    $post->user_hash = rex_poll_user::getHash();
+        if (!empty($option_id)) {
+            if ($this->checkOptionById($option_id)) {
+                $post = rex_poll_vote::create();
+                $post->poll_id = $this->id;
+                $post->status = $status;
+                $post->option_id = $option_id;
+                $post->ip = $_SERVER['REMOTE_ADDR'];
+                $post->user_hash = rex_poll_user::getHash();
 
-                    if ($post->save()) {
-                    } else {
-                        dump(implode('<br>', $post->getMessages()));
-                    }
+                if ($post->save()) {
+                } else {
+                    dump(implode('<br>', $post->getMessages()));
+                    return false;
                 }
             }
-
-                // TODO: User wird im Moment immer gesperrt, auch wenn das Voting falsch war.
-                rex_poll_user::setVoted($this);
-
-            return true;
         }
+
+        // TODO: User wird im Moment immer gesperrt, auch wenn das Voting falsch war.
+        rex_poll_user::setVoted($this);
+
+        return true;
     }
 
-    public function checkOptionById($id)
+    public
+    function checkOptionById($id)
     {
-        $id = (int) $id;
+        $id = (int)$id;
         $option = rex_poll_option::get($id);
         if ($option && $option->poll_id == $this->id) {
             return true;
         }
+
         return false;
     }
 
-    public function getOptions($sortedby = 'hits')
+    public
+    function getOptions($sortedby = 'hits')
     {
         return $this->getRelatedCollection('options');
     }
 
-    public function getOptionsSorted($sortedby = 'hits')
+    public
+    function getOptionsSorted($sortedby = 'hits')
     {
         $options = $this->getOptions();
         // TODO: $sortedby // hits / alphanum /

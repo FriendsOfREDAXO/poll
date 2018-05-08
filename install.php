@@ -32,6 +32,23 @@ if ($module_id == rex_request('module_id', 'integer', -1)) {
 } else {
     $mi->setValue('name', $yform_module_name);
     $mi->insert();
-    $module_id = (int) $mi->getLastId();
+    $module_id = (int)$mi->getLastId();
     $module_name = $yform_module_name;
+}
+
+$et = rex_sql::factory();
+$et->setTable('rex_yform_email_template');
+$et->select('id');
+$et->setWhere('name="poll_user"');
+if (!$et->getRow()) {
+    $et->setTable('rex_yform_email_template');
+    $et->setValue('name', 'poll_user');
+    $et->setValue('subject', 'Bestätigung für Umfrage "REX_YFORM_DATA[field="poll-title"]"');
+    $et->setValue('body', 'Hallo,
+
+vielen Dank für deine Beteiligung an der Umfrage. Bitte bestätige deine Wahl unter folgendem Link: REX_YFORM_DATA[field="poll-link"]
+
+Vielen Dank,
+Das Poll-System');
+    $et->insert();
 }

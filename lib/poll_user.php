@@ -2,24 +2,18 @@
 
 class rex_poll_user extends \rex_yform_manager_dataset
 {
-    public static function hasVoted(rex_poll $poll)
+    public static function getVote(rex_poll $poll, $hash)
     {
-        $votes = rex_poll_vote::query()
+        return rex_poll_vote::query()
             ->where('poll_id', $poll->id)
-            ->where('user_hash', self::getHash())
-            ->find();
-
-        if (count($votes) > 0) {
-            return true;
-        }
-
-        return false;
+            ->where('user_hash', $hash)
+            ->findOne();
     }
 
     public static function getHash()
     {
         // TODO: hash verfeinern
-        $key = $_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR'];
+        $key = $_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR'];
         return sha1($key);
     }
 

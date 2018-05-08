@@ -1,6 +1,7 @@
 poll = Umfrage
 navigation_poll = Umfrage
 
+poll_finished = Die Umfrage ist beendet
 poll_main = Umfragen
 poll_statistic = Statistiken
 poll_options = Umfrage Optionen
@@ -11,7 +12,8 @@ poll_option_description = Beschreibung
 poll_option_link = Link
 poll_option_link_info = inkl. http://
 
-
+poll_email_label = E-Mail-Adresse
+poll_email_note = Für die Bestätigung deiner Wahl senden wir dir eine E-Mail. Gib hierzu bitte eine gültige E-Mail-Adresse an.
 
 poll_title = Umfrage
 poll_online = Online
@@ -32,6 +34,16 @@ poll_userhash = Userhash (Kennung)
 
 poll_settings = Einstellungen
 
+poll_vote_sucess = Abstimmung wurde aufgenommen
+poll_vote_fail = Abstimmung konnte nicht aufgenommen werden
+poll_vote_confirm = Wir haben eine E-Mail an die von dir angegebene Adresse gesendet. Bitte rufe den darin enthaltenen Link auf um deine Wahl zu bestätigen.
+poll_vote_exists = Umfrage wurde bereits beantwortet
+poll_vote_notexists = Es wurde keine Abstimmung gefunden
+
+
 ip = IP
 
 poll_module = Umfrage Modul
+
+poll_validate_email = Bitte gib eine gültige E-Mail-Adresse an
+poll_validate_option = Bitte wähle eine Option
