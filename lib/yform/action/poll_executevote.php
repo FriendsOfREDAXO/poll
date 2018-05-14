@@ -11,28 +11,38 @@ class rex_yform_action_poll_executevote extends rex_yform_action_abstract
 {
     public function executeAction()
     {
-        $error = true;
         $poll_id = $this->params['value_pool']['sql'][$this->getElement(2)];
         $option_id = $this->params['value_pool']['sql'][$this->getElement(3)];
-        $status = $this->getElement(4);
+        $email = isset($this->params['value_pool']['sql'][$this->getElement(4)]) ? $this->params['value_pool']['sql'][$this->getElement(4)] : '';
+        $template_name = $this->getElement(5);
 
-        if ($poll_id > 0 && rex_poll::get($poll_id)->executeVote($option_id,$status)) {
-
-            $this->params['value_pool']['email']['poll-link'] = rtrim(rex::getServer(),"/").rex_getUrl(rex_article::getCurrentid(), rex_clang::getCurrentid(), ['confirm' => rex_poll_user::getHash()]);
-
-            $error = false;
+        $hash = rex_poll_user::getHash();
+        if ($email != '') {
+            $hash = rex_poll_user::getHash($email);
         }
 
-        if ($error) {
-            $this->params['form_show'] = true;
-            $this->params['hasWarnings'] = true;
-            $this->params['warning_messages'][] = $this->params['Error-Code-InsertQueryError'];
-            return false;
+        $poll = rex_poll::get($poll_id);
+
+        if ($poll->executeVote($option_id, $hash)) {
+            if ($poll->type == 'email') {
+                $this->params['value_pool']['email']['poll-link'] = rtrim(rex::getServer(), "/") . rex_getUrl(rex_article::getCurrentid(), rex_clang::getCurrentid(), ['hash' => $hash]);
+
+                $etpl = rex_yform_email_template::getTemplate($template_name);
+                $etpl = rex_yform_email_template::replaceVars($etpl, $this->params['value_pool']['email']);
+
+                $etpl['mail_to'] = $email;
+                $etpl['mail_to_name'] = $email;
+
+                if (!rex_yform_email_template::sendMail($etpl, $template_name)) {
+                    return false;
+                }
+//                dump($etpl);
+            }
         }
     }
 
     public function getDescription()
     {
-        return 'action|poll_executevote|label poll id|label option|label email|status';
+        return 'action|poll_executevote|label poll id|label option|label email|email template';
     }
 }

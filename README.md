@@ -14,9 +14,14 @@
 Last Changes
 -------
 
+### Version 1.3 // 14.05.2018
+
+* Restrukturierung der Ausgabe
+
 ### Version 1.1 // 08.05.2018
 
 * Umfrage mit Emailbestätigung
+* YForm basierte Formulare
 
 ### Version 1.0 // 10.05.2017
 

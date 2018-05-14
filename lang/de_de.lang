@@ -19,7 +19,8 @@ poll_title = Umfrage
 poll_online = Online
 poll_type = Umfragetyp
 poll_type_direct = Umfrage direkt
-poll_type_email = Umfrage mit E-Mail Bestätigung
+poll_type_email = Umfrage beschränkt (E-Mail)
+poll_type_hash = Umfrage beschränkt (Hash)
 
 poll_showresult = Ergebnis anzeigen
 
@@ -36,11 +37,13 @@ poll_userhash = Userhash (Kennung)
 poll_settings = Einstellungen
 
 poll_votes_taken = Es wurden bereits {0} Stimmen abgegeben
-poll_vote_sucess = Abstimmung wurde aufgenommen
+poll_vote_success = Vielen Dank! Die Abstimmung wurde aufgenommen
 poll_vote_fail = Abstimmung konnte nicht aufgenommen werden
 poll_vote_confirm = Wir haben eine E-Mail an die von dir angegebene Adresse gesendet. Bitte rufe den darin enthaltenen Link auf um deine Wahl zu bestätigen.
 poll_vote_exists = Umfrage wurde bereits beantwortet
 poll_vote_notexists = Es wurde keine Abstimmung gefunden
+
+poll_error = Es ist ein Fehler aufgetreten
 
 
 ip = IP
