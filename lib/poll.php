@@ -6,13 +6,14 @@ class rex_poll extends \rex_yform_manager_dataset
 
     public function showResult()
     {
+        //always=0,ifvoted=1,never=2,ifended=3
         if ($this->showresult == 0) {
             return true;
         } elseif ($this->showresult == 2) {
             return false;
-        } elseif ($this->showresult == 3 && $this->status = 0) {
+        } elseif ($this->showresult == 3 && $this->status == 0) {
             return true;
-        } elseif ($this->showresult == 1 && rex_poll_user::hasVoted($this)) {
+        } elseif ($this->showresult == 1 && rex_poll_user::hasVoted($this,rex_poll_user::getHash())) {
             return true;
         }
         return false;

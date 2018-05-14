@@ -23,6 +23,7 @@ poll_type_email = Umfrage mit E-Mail Bestätigung
 
 poll_showresult = Ergebnis anzeigen
 
+poll_result = Ergebnis
 poll_result_always = immer
 poll_result_ifvoted = wenn gevoted wurde
 poll_result_never = nie
@@ -34,6 +35,7 @@ poll_userhash = Userhash (Kennung)
 
 poll_settings = Einstellungen
 
+poll_votes_taken = Es wurden bereits {0} Stimmen abgegeben
 poll_vote_sucess = Abstimmung wurde aufgenommen
 poll_vote_fail = Abstimmung konnte nicht aufgenommen werden
 poll_vote_confirm = Wir haben eine E-Mail an die von dir angegebene Adresse gesendet. Bitte rufe den darin enthaltenen Link auf um deine Wahl zu bestätigen.

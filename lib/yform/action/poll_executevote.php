@@ -18,7 +18,7 @@ class rex_yform_action_poll_executevote extends rex_yform_action_abstract
 
         if ($poll_id > 0 && rex_poll::get($poll_id)->executeVote($option_id,$status)) {
 
-            $this->params['value_pool']['email']['poll-link'] = rex::getServer().rex_getUrl(rex_article::getCurrentid(), rex_clang::getCurrentid(), ['confirm' => rex_poll_user::getHash()]);
+            $this->params['value_pool']['email']['poll-link'] = rtrim(rex::getServer(),"/").rex_getUrl(rex_article::getCurrentid(), rex_clang::getCurrentid(), ['confirm' => rex_poll_user::getHash()]);
 
             $error = false;
         }
