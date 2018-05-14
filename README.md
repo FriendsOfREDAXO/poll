@@ -14,7 +14,7 @@
 Last Changes
 -------
 
-### Version 1.3 // 14.05.2018
+### Version 1.2 // 14.05.2018
 
 * Restrukturierung der Ausgabe
 
