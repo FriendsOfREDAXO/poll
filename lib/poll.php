@@ -178,7 +178,7 @@ class rex_poll extends \rex_yform_manager_dataset
                     validate|empty|poll-option|' . rex_i18n::msg('poll_validate_option') . '
                     
                     action|poll_executevote|poll-id|poll-option
-                    action|showtext|<p>' . rex_i18n::msg('poll_vote_success') . '</p>|||1
+                    action|redirect|'.rex_article::getCurrentId().'
                 ';
         }
 

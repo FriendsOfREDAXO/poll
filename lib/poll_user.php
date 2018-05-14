@@ -17,6 +17,9 @@ class rex_poll_user extends \rex_yform_manager_dataset
 
     public static function getHash($salt = '')
     {
-        return sha1($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR'] . $salt);
+        if($salt != ''){
+            return sha1($salt);
+        }
+        return sha1($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR']);
     }
 }
