@@ -8,14 +8,14 @@ $out = '';
 $results = '';
 
 $poll_id = (int)'REX_VALUE[1]';
+$hash = rex_request('hash', 'string') != '' ? rex_request('hash', 'string') : rex_poll_user::getHash();
 $poll = null;
 
 if ($poll_id > 0) {
     $poll = rex_poll::get($poll_id);
     if ($poll) {
         $out = '<h1>' . rex_i18n::msg('poll_title') . ': ' . $poll->title . ' </h1> ' . $poll->getOutput();
-
-        if ($poll->showResult()) {
+        if ($poll->showResult($hash)) {
             $hits_all = $poll->getHits() > 0 ? $poll->getHits() : 1;
             foreach ($poll->getOptions() as $option) {
                 $hits = $option->getHits();

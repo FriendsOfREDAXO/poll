@@ -4,8 +4,10 @@ class rex_poll extends \rex_yform_manager_dataset
 {
     // translate:poll_result_always=0,translate:poll_result_ifvoted=1,translate:poll_result_never=2,poll_result_ifended=3
 
-    public function showResult($hash = '')
+    public function showResult()
     {
+        $hash = rex_request('hash', 'string') != '' ? rex_request('hash', 'string') : rex_poll_user::getHash();
+
         //always=0,ifvoted=1,never=2,ifended=3
         if ($this->showresult == 0) {
             return true;
@@ -13,8 +15,17 @@ class rex_poll extends \rex_yform_manager_dataset
             return false;
         } elseif ($this->showresult == 3 && $this->status == 0) {
             return true;
-        } elseif ($this->showresult == 1 && rex_poll_user::getVote($this, $hash)) {
-            return true;
+        } elseif ($this->showresult == 1) {
+            print_r($_REQUEST);
+            if($this->type == 'direct' && rex_request('vote_success','string') == '1'){
+                return true;
+            }
+            else if($this->type == 'hash' && rex_poll_user::getVote($this, $hash)){
+                return true;
+            }
+            else if($this->type == 'email' && rex_poll_user::getVote($this, $hash)){
+                return true;
+            }
         }
         return false;
     }
@@ -178,7 +189,7 @@ class rex_poll extends \rex_yform_manager_dataset
                     validate|empty|poll-option|' . rex_i18n::msg('poll_validate_option') . '
                     
                     action|poll_executevote|poll-id|poll-option
-                    action|redirect|'.rex_article::getCurrentId().'
+                    action|showtext|<p>' . rex_i18n::msg('poll_vote_success') . '</p>|||1
                 ';
         }
 

@@ -25,6 +25,9 @@ class rex_yform_action_poll_executevote extends rex_yform_action_abstract
             }
 
             if ($poll->executeVote($option_id, $hash)) {
+                if ($poll->type == 'direct') {
+                    $_REQUEST['vote_success'] = true;
+                }
                 if ($poll->type == 'email') {
                     $this->params['value_pool']['email']['poll-link'] = rtrim(rex::getServer(), "/") . rex_getUrl(rex_article::getCurrentid(), rex_clang::getCurrentid(), ['hash' => $hash]);
 
