@@ -4,7 +4,7 @@ class rex_poll extends \rex_yform_manager_dataset
 {
     // translate:poll_result_always=0,translate:poll_result_ifvoted=1,translate:poll_result_never=2,poll_result_ifended=3
 
-    public function showResult()
+    public function showResult($hash = '')
     {
         //always=0,ifvoted=1,never=2,ifended=3
         if ($this->showresult == 0) {
@@ -13,7 +13,7 @@ class rex_poll extends \rex_yform_manager_dataset
             return false;
         } elseif ($this->showresult == 3 && $this->status == 0) {
             return true;
-        } elseif ($this->showresult == 1 && rex_poll_user::hasVoted($this, rex_poll_user::getHash())) {
+        } elseif ($this->showresult == 1 && rex_poll_user::getVote($this, $hash)) {
             return true;
         }
         return false;
