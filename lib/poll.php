@@ -16,7 +16,6 @@ class rex_poll extends \rex_yform_manager_dataset
         } elseif ($this->showresult == 3 && $this->status == 0) {
             return true;
         } elseif ($this->showresult == 1) {
-            print_r($_REQUEST);
             if($this->type == 'direct' && rex_request('vote_success','string') == '1'){
                 return true;
             }
