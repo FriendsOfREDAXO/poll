@@ -52,3 +52,5 @@ poll_module = Umfrage Modul
 
 poll_validate_email = Bitte gib eine gültige E-Mail-Adresse an
 poll_validate_option = Bitte wähle eine Option
+
+statistics = Statistiken

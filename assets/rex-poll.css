@@ -1,0 +1,25 @@
+.rex-poll .progress-bar {
+    width: 0;
+    transition: 1s;
+}
+.rex-poll .poll {
+    padding:30px;
+    cursor:pointer;
+}
+.rex-poll .poll:hover{
+    background-color: #cfcfc4;
+}
+.rex-poll .poll-status-online,
+.rex-poll .poll-status-offline {
+    border-radius:100%;
+    height:15px;
+    width:15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.rex-poll .poll-status-online {
+    background-color: #77dd77;
+}
+.rex-poll .poll-status-offline {
+    background-color: #ff6961;
+}

@@ -26,3 +26,8 @@ if (rex::isBackend()) {
 rex_yform_manager_dataset::setModelClass('rex_poll', rex_poll::class);
 rex_yform_manager_dataset::setModelClass('rex_poll_option', rex_poll_option::class);
 rex_yform_manager_dataset::setModelClass('rex_poll_vote', rex_poll_vote::class);
+
+if (rex::isBackend() && rex::getUser()) {
+    rex_view::addCssFile($this->getAssetsUrl('rex-poll.css'));
+    rex_view::addJsFile($this->getAssetsUrl('rex-poll.js'));
+}
