@@ -15,7 +15,9 @@ foreach (rex_poll::getAll() as $poll) {
             $results .= '
                 <div class="progress bb-progress-thin">
                     <div class="progress-bar bb-blue-bg" role="progressbar" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100" data-percent="' . $percent . '">
-                    <span class="poll-vote-value">' . $percent . ' % [ ' . $option->getHits() . ' von ' . $hits_all . ' Stimmen ]</span> ' . $option->title . '</div>
+                    <span class="poll-vote-value">' . $percent . ' % [ ' . $option->getHits() .
+                    //' von ' . $hits_all .
+                    ' Stimmen ]</span> ' . $option->title . '</div>
                 </div>
              ';
         }

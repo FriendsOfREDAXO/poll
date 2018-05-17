@@ -174,6 +174,9 @@ class rex_poll extends \rex_yform_manager_dataset
                     validate|empty|poll-email|' . rex_i18n::msg('poll_validate_email') . '
                     validate|email|poll-email|' . rex_i18n::msg('poll_validate_email') . '
                     
+                    checkbox|Datenschutz|<p>Ich habe die <a target="_blank" rel="noopener" href="'.rex_getUrl(120).'">Datenschutzerklärung</a> zur Kenntnis genommen.</p>|0,1|0|no_db
+                    validate|empty|Datenschutz|Bitte bestätigen Sie, dass Sie die Datenschutzerklärung zur Kenntnis genommen haben und stimmen Sie der elektronischen Verwendung Ihrer Daten zur Abstimmung zu.
+
                     action|poll_executevote|poll-id|poll-option|poll-email|poll_user
                     action|showtext|<p>' . rex_i18n::msg('poll_vote_confirm') . '</p>|||1
                 ';

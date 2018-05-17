@@ -1,6 +1,14 @@
+.rex-poll .progress {
+    background-color: #324050;
+}
 .rex-poll .progress-bar {
     width: 0;
     transition: 1s;
+    white-space: nowrap;
+    text-align: left;
+}
+.rex-poll .progress-bar span {
+    padding-left: 2em;
 }
 .rex-poll .poll {
     padding:30px;
