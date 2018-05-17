@@ -13,6 +13,13 @@
 
 Last Changes
 -------
+### Version 1.3.1 // 17.05.2018
+
+* Statistikanzeige verbessert, Datenschutzcheckbox
+
+### Version 1.3 // 16.05.2018
+
+* Statistik im Backend
 
 ### Version 1.2 // 14.05.2018
 
