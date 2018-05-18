@@ -13,6 +13,10 @@
 
 Last Changes
 -------
+### Version 1.3.3 // 18.05.2018
+
+* Ausgabe Options-Details im Modul-Output
+
 ### Version 1.3.2 // 18.05.2018
 
 * Bugfix
