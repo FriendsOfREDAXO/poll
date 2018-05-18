@@ -13,6 +13,10 @@
 
 Last Changes
 -------
+### Version 1.3.2 // 18.05.2018
+
+* Bugfix
+
 ### Version 1.3.1 // 17.05.2018
 
 * Statistikanzeige verbessert, Datenschutzcheckbox

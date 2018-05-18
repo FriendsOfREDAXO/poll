@@ -11,12 +11,12 @@ class rex_yform_action_poll_executevote extends rex_yform_action_abstract
 {
     public function executeAction()
     {
-        $poll_id = $this->params['value_pool']['sql'][$this->getElement(2)];
-        $option_id = $this->params['value_pool']['sql'][$this->getElement(3)];
+        $pollId = $this->params['value_pool']['sql'][$this->getElement(2)];
+        $optionId = $this->params['value_pool']['sql'][$this->getElement(3)];
         $email = isset($this->params['value_pool']['sql'][$this->getElement(4)]) ? $this->params['value_pool']['sql'][$this->getElement(4)] : '';
-        $template_name = $this->getElement(5);
+        $templateId = $this->getElement(5);
 
-        $poll = rex_poll::get($poll_id);
+        $poll = rex_poll::get($pollId);
         if ($poll) {
 
             $hash = rex_poll_user::getHash();
@@ -24,23 +24,28 @@ class rex_yform_action_poll_executevote extends rex_yform_action_abstract
                 $hash = rex_poll_user::getHash($email . $poll->id . rex::getProperty('instname'));
             }
 
-            if ($poll->executeVote($option_id, $hash)) {
+            if ($poll->executeVote($optionId, $hash)) {
                 if ($poll->type == 'direct') {
                     $_REQUEST['vote_success'] = true;
                 }
                 if ($poll->type == 'email') {
                     $this->params['value_pool']['email']['poll-link'] = rtrim(rex::getServer(), "/") . rex_getUrl(rex_article::getCurrentid(), rex_clang::getCurrentid(), ['hash' => $hash]);
 
-                    $etpl = rex_yform_email_template::getTemplate($template_name);
-                    $etpl = rex_yform_email_template::replaceVars($etpl, $this->params['value_pool']['email']);
 
-                    $etpl['mail_to'] = $email;
-                    $etpl['mail_to_name'] = $email;
+                    $etpl = $poll->getEmailTemplateById($templateId);
+                    if($etpl){
+                        $etpl = rex_yform_email_template::replaceVars($etpl, $this->params['value_pool']['email']);
 
-                    if (!rex_yform_email_template::sendMail($etpl, $template_name)) {
-                        return false;
+                        $etpl['mail_to'] = $email;
+                        $etpl['mail_to_name'] = $email;
+
+                        if (!rex_yform_email_template::sendMail($etpl)) {
+                            return false;
+                        }
                     }
-//                dump($etpl);
+
+//                    dump($etpl);
+                    return false;
                 }
             }
         }
