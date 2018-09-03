@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.3.4 (03.09.2018)
+
+* Release zur Veröffentlichung im Installer
+
 ## Version 1.3.3 (18.05.2018)
 
 * Ausgabe Options-Details im Modul-Output
