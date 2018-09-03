@@ -1,4 +1,8 @@
-# Umfragetool (poll) für REDAXO 5.x
+# Umfragen
+
+Erstellt und verwaltet Umfragen in REDAXO 5, bei Bedarf mit E-Mailbestätigung.
+
+![Screenshot](https://raw.githubusercontent.com/FriendsOfREDAXO/poll/assets/poll.png)
 
 ## Installation
 
