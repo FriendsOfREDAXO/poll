@@ -1,1 +1,56 @@
 poll = Poll
+navigation_poll = Poll
+
+poll_finished = The poll has ended
+poll_main = Polls
+poll_statistic = Statistics
+poll_options = Poll options
+poll_option = Option
+poll_error_pleasechooseapoll = Please select a poll
+poll_option_image = Image
+poll_option_description = Description
+poll_option_link = Link
+poll_option_link_info = incl. http://
+
+poll_email_label = Email address
+poll_email_note = To confirm your selection we will send you an email. Please enter a valid email address.
+
+poll_title = Poll
+poll_online = Online
+poll_type = Poll type
+poll_type_direct = Poll directly
+poll_type_email = Restricted poll (email)
+poll_type_hash = Restricted poll (hash)
+
+poll_showresult = Show results
+
+poll_result = Result
+poll_result_always = always
+poll_result_ifvoted = when voted
+poll_result_never = never
+poll_result_ifended = when poll has ended
+
+poll_votes = Poll entries
+poll_create_datetime = Create date
+poll_userhash = User hash (key)
+
+poll_settings = Settings
+
+poll_votes_taken = {0} entries have been recorded
+poll_vote_success = Thank you! Your vote has been received.
+poll_vote_fail = Vote could not be received.
+poll_vote_confirm = We've sent you an email to the address you entered. Please click on the link in the message to confirm your vote.
+poll_vote_exists = Your vote has already been received.
+poll_vote_notexists = Poll not found
+
+poll_error = An error occurred.
+
+
+ip = IP
+
+poll_module = Poll module
+
+poll_validate_email = Please enter a valid email address
+poll_validate_option = Please select an option
+
+statistics = Statistics
