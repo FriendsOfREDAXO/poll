@@ -1,0 +1,56 @@
+poll = Enkät
+navigation_poll = Enkät
+
+poll_finished = Enkäten är över
+poll_main = Enkät
+poll_statistic = Statistiken
+poll_options = Enkätalternativ
+poll_option = Option
+poll_error_pleasechooseapoll = Var god välj en Enkät
+poll_option_image = Bild
+poll_option_description = Beskrivning
+poll_option_link = Länk
+poll_option_link_info = inkl. http://
+
+poll_email_label = E-post adress
+poll_email_note = För bekräftelse av ditt val skickar vi dig ett mail. Ange en giltig e-postadress.
+
+poll_title = Enkät
+poll_online = Online
+poll_type = Typ av enkät
+poll_type_direct = Enkät direkt
+poll_type_email = Enkät begränsat (E-post)
+poll_type_hash = Enkät begränsat (Hash)
+
+poll_showresult = Visa resultat
+
+poll_result = Resultat
+poll_result_always = alltid
+poll_result_ifvoted = om det har blivit omröstat
+poll_result_never = aldrig
+poll_result_ifended = om enkäten avslutades
+
+poll_votes = Enkät inlägg
+poll_create_datetime = Skapelsedatum
+poll_userhash = Userhash (identifierare)
+
+poll_settings = Inställningar
+
+poll_votes_taken = {0} röster har redan lämnats in
+poll_vote_success = Tack! Rösten togs
+poll_vote_fail = Röstning kunde inte godtas
+poll_vote_confirm = Vi har skickat ett e-postmeddelande till adressen du angav. Vänligen öppna den medföljande länken för att bekräfta ditt val.
+poll_vote_exists = Undersökning har redan besvarats
+poll_vote_notexists = Ingen omröstning hittades
+
+poll_error = Ett fel har inträffat
+
+
+ip = IP
+
+poll_module = Enkät modul
+
+poll_validate_email = Ange en giltig e-postadress
+poll_validate_option = Välj ett alternativ
+
+statistics = Statistik
