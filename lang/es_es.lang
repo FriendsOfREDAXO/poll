@@ -1,0 +1,56 @@
+poll = Encuesta
+navigation_poll = Encuesta
+
+poll_finished = La encuesta ha terminado
+poll_main = Encuestas
+poll_statistic = Estadística
+poll_options = Opciones de encuesta
+poll_option = Opción
+poll_error_pleasechooseapoll = Por favor seleccione una encuesta
+poll_option_image = Imagen
+poll_option_description = Descripción
+poll_option_link = Enlace
+poll_option_link_info = incluyendo http://
+
+poll_email_label = E-Mail-Dirección
+poll_email_note = Para la confirmación de su elección le enviaremos un email. Por favor, introduzca una dirección de email válida.
+
+poll_title = Encuesta
+poll_online = En línea
+poll_type = Tipo de encuesta
+poll_type_direct = Encuesta directamente
+poll_type_email = Encuesta limitada (email)
+poll_type_hash = Encuesta limitada (hash)
+
+poll_showresult = Mostrar resultado
+
+poll_result = Resultado
+poll_result_always = Siempre
+poll_result_ifvoted = Si ha sido votado
+poll_result_never = No
+poll_result_ifended = Cuando termina la encuesta
+
+poll_votes = Entradas de encuestas
+poll_create_datetime = fecha de creación
+poll_userhash = Hash de usuario (identificador)
+
+poll_settings = Ajustes
+
+poll_votes_taken = {0} votos ya han sido emitidos
+poll_vote_success = Muchas gracias La votación fue tomada
+poll_vote_fail = Votación no pudo ser aceptada
+poll_vote_confirm = Hemos enviado un email a la dirección que proporcionó. Por favor llame al enlace incluido para confirmar su elección.
+poll_vote_exists = Encuesta ya ha sido respondida
+poll_vote_notexists = No se encontró voto
+
+poll_error = Ha ocurrido un error
+
+
+ip = IP
+
+poll_module = Módulo de encuesta
+
+poll_validate_email = Por favor, introduzca una dirección de email válida
+poll_validate_option = Por favor elige una opción
+
+statistics = Estadística
