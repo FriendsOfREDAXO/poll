@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.3.5 (14.08.2019)
+
+* Fix für YForm 3
+
 ## Version 1.3.4 (03.09.2018)
 
 * Release zur Veröffentlichung im Installer
