@@ -1,54 +1,60 @@
 <?php
 
-$content = rex_file::get(rex_path::addon('poll', 'install/tablesets/poll_tables.json'));
-rex_yform_manager_table_api::importTablesets($content);
+rex_yform_manager_table_api::importTablesets(rex_file::get(rex_path::addon('poll', 'install/tablesets/poll_tables.json')));
 
-$content = '';
 $searchtext = 'module:poll_basic_output';
-
-$gm = rex_sql::factory();
-$gm->setQuery('select * from rex_module where output LIKE "%' . $searchtext . '%"');
-
-$module_id = 0;
-$module_name = '';
-foreach ($gm->getArray() as $module) {
-    $module_id = $module['id'];
-    $module_name = $module['name'];
-}
-
 $yform_module_name = 'translate:poll_module';
 
-$input = rex_file::get(rex_path::addon('poll', 'module/module_input.inc'));
-$output = rex_file::get(rex_path::addon('poll', 'module/module_output.inc'));
+$gm = rex_sql::factory();
+$gm->setDebug();
+$gm->setQuery('select * from rex_module where output LIKE ?', ['%' . $searchtext . '%']);
+$modules = $gm->getArray();
 
-$mi = rex_sql::factory();
-$mi->setTable('rex_module');
-$mi->setValue('input', $input);
-$mi->setValue('output', $output);
+if (0 < count($modules)) {
+    $gm->setQuery('update rex_module set input = :input, output = :output, updatedate = :updatedate, updateuser = :updateuser where id = :module_id', [
+        ':input' => rex_file::get(rex_path::addon('poll', 'module/module_input.inc')),
+        ':output' => rex_file::get(rex_path::addon('poll', 'module/module_output.inc')),
+        ':updatedate' => date('Y-m-d H:i:s'),
+        ':updateuser' => 'poll-addon',
+        ':module_id' => $modules[0]['id'],
+    ]);
 
-if ($module_id == rex_request('module_id', 'integer', -1)) {
-    $mi->setWhere('id="' . $module_id . '"');
-    $mi->update();
 } else {
-    $mi->setValue('name', $yform_module_name);
-    $mi->insert();
-    $module_id = (int)$mi->getLastId();
-    $module_name = $yform_module_name;
+    $gm->setQuery('insert into rex_module set name = :name, input = :input, output = :output, updatedate = :updatedate, updateuser = :updateuser where id = :module_id', [
+        ':name' => $yform_module_name,
+        ':input' => rex_file::get(rex_path::addon('poll', 'module/module_input.inc')),
+        ':output' => rex_file::get(rex_path::addon('poll', 'module/module_output.inc')),
+        ':updatedate' => date('Y-m-d H:i:s'),
+        ':updateuser' => 'poll-addon',
+        ':module_id' => $modules[0]['id'],
+    ]);
+
 }
 
-$et = rex_sql::factory();
-$et->setTable('rex_yform_email_template');
-$et->select('id');
-$et->setWhere('name="poll_user"');
-if (!$et->getRow()) {
-    $et->setTable('rex_yform_email_template');
-    $et->setValue('name', 'poll_user');
-    $et->setValue('subject', 'Bestätigung für Umfrage "REX_YFORM_DATA[field="poll-title"]"');
-    $et->setValue('body', 'Hallo,
+$name = 'poll_user';
+
+$templates = $gm->getArray('select * from rex_yform_email_template where name = ?', [$name]);
+$subject = 'Bestätigung für Umfrage "REX_YFORM_DATA[field="poll-title"]"';
+$body = 'Hallo,
 
 vielen Dank für deine Beteiligung an der Umfrage. Bitte bestätige deine Wahl unter folgendem Link: REX_YFORM_DATA[field="poll-link"]
 
 Vielen Dank,
-Das Poll-System');
-    $et->insert();
+Das Poll-System';
+
+if (0 < count($templates)) {
+    $gm->setQuery('update rex_yform_email_template set subject = :subject, body = :body where id = :template_id', [
+        ':subject' => $subject,
+        ':body' => $body,
+        ':template_id' => $templates[0]['id'],
+    ]);
+
+} else {
+
+    $gm->setQuery('insert into rex_yform_email_template set subject = :subject, body = :body, name = :name', [
+        ':name' => $name,
+        ':subject' => $subject,
+        ':body' => $body,
+    ]);
+
 }
