@@ -25,7 +25,7 @@ if ($poll->showResult($hash)) {
         }
 
         $link = '';
-        if(rex_media::get($option->media)){
+        if(rex_media::get($option->media) && '' != $option->link){
             $link = '<div class="poll-link"><a href="'.rex_getUrl($option->link).'">mehr Informationen</a></div>';
         }
 
