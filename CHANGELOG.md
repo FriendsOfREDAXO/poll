@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 1.4 (25.05.2020)
+
+* Optionen als Inline Relations
+* Versionsabgängigkeit nun YForm 3
+* Umbau auf Fragmente.
+* Sprachkeys fürs Frontend gesetzt
+
+
 ## Version 1.3.5 (14.08.2019)
 
 * Fix für YForm 3

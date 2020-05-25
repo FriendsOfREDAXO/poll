@@ -3,7 +3,7 @@
 $poll = $this->poll;
 $hash = rex_request('hash', 'string') != '' ? rex_request('hash', 'string') : rex_poll_user::getHash();
 
-echo '<h1>' . rex_i18n::msg('poll_title') . ': ' . $poll->title . ' </h1> ';
+echo '<h1>{{ poll_title }}: ' . rex_escape($poll->title) . ' </h1> ';
 
 echo $poll->getOutput();
 
@@ -46,8 +46,8 @@ if ($poll->showResult($hash)) {
 
     echo '    <div class="rex-poll">
                 <div class="rex-poll-results">
-                    <h2>' . rex_i18n::msg('poll_result') . ':</h2>
-                    ' . ($poll->getHits() > 0 ? '<p>' . rex_i18n::msg('poll_votes_taken', $poll->getHits()) . '</p>' : '') . '
+                    <h2>{{ poll_result }}</h2>
+                    ' . ($poll->getHits() > 0 ? '<p> {{ poll_votes_taken }} ' . $poll->getHits() . '</p>' : '') . '
                     <ul> ' . implode('', $options) . '</ul>
                 </div>
              </div>

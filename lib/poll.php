@@ -167,12 +167,12 @@ class rex_poll extends \rex_yform_manager_dataset
                     html|poll-question|<h2>' . $this->description . '</h2>
                     radio|poll-option||' . implode(',', $options) . '
 
-                    validate|empty|poll-option|' . rex_i18n::msg('poll_validate_option') . '
+                    validate|empty|poll-option|{{ poll_validate_option }}
 
                     ' . $comment . '
 
                     action|poll_executevote|poll-id|poll-option||poll-comment
-                    action|showtext|<p>' . rex_i18n::msg('poll_vote_success') . '</p>|||1
+                    action|showtext|<p>{{ poll_vote_success }}</p>|||1
                 ';
                 break;
             case 'email':
@@ -185,12 +185,12 @@ class rex_poll extends \rex_yform_manager_dataset
 
                     radio|poll-option||' . implode(',', $options) . '
 
-                    html|email_note|<p> ' . rex_i18n::msg('poll_email_note') . '</p>
-                    text|poll-email|' . rex_i18n::msg('poll_email_label') . '
+                    html|email_note|<p>{{ poll_email_note }}</p>
+                    text|poll-email|{{ poll_email_label }}
 
-                    validate|empty|poll-option|' . rex_i18n::msg('poll_validate_option') . '
-                    validate|empty|poll-email|' . rex_i18n::msg('poll_validate_email') . '
-                    validate|email|poll-email|' . rex_i18n::msg('poll_validate_email') . '
+                    validate|empty|poll-option|{{ poll_validate_option }}
+                    validate|empty|poll-email|{{ poll_validate_email }}
+                    validate|email|poll-email|{{ poll_validate_email }}
 
                     ' . $comment . '
 
@@ -198,7 +198,7 @@ class rex_poll extends \rex_yform_manager_dataset
                     validate|empty|ds|{{ poll_datenschutz_checkbox_error }}
 
                     action|poll_executevote|poll-id|poll-option|poll-email|' . $this->getValue('emailtemplate') . '|poll-comment
-                    action|showtext|<p>' . rex_i18n::msg('poll_vote_confirm') . '</p>|||1
+                    action|showtext|<p>{{ poll_vote_confirm }}</p>|||1
                 ';
                 break;
             default:
@@ -208,12 +208,12 @@ class rex_poll extends \rex_yform_manager_dataset
                     html|poll-question|<h2>' . $this->description . '</h2>
                     radio|poll-option||' . implode(',', $options) . '
 
-                    validate|empty|poll-option|' . rex_i18n::msg('poll_validate_option') . '
+                    validate|empty|poll-option|{{ poll_validate_option }}
 
                     ' . $comment . '
 
                     action|poll_executevote|poll-id|poll-option||poll-comment
-                    action|showtext|<p>' . rex_i18n::msg('poll_vote_success') . '</p>|||1
+                    action|showtext|<p>{{ poll_vote_success }}</p>|||1
                 ';
         }
 
@@ -238,13 +238,13 @@ class rex_poll extends \rex_yform_manager_dataset
                     if (!rex::isBackend()) {
                         $vote = rex_poll_user::getVote($this, rex_poll_user::getHash());
                         if ($vote) {
-                            $out = rex_i18n::msg('poll_vote_exists');
+                            $out = '{{ poll_vote_exists }}';
                         } else {
                             $out = '<div class="rex-poll-voting"> ' . $this->getFormByType() . '</div> ';
                         }
                     }
                 } else {
-                    $out = '<p>' . rex_i18n::msg('poll_finished') . '</p>';
+                    $out = '<p>{{ poll_finished }}</p>';
                 }
 
                 return $out;
@@ -260,22 +260,22 @@ class rex_poll extends \rex_yform_manager_dataset
                             if ($vote) {
                                 if (0 == $vote->status) {
                                     if ($vote->activate()) {
-                                        $out = rex_i18n::msg('poll_vote_success');
+                                        $out = ' {{ poll_vote_success }}';
                                     } else {
-                                        $out = rex_i18n::msg('poll_vote_fail');
+                                        $out = '{{ poll_vote_fail }}';
                                     }
                                 } else {
-                                    $out = rex_i18n::msg('poll_vote_exists');
+                                    $out = '{{ poll_vote_exists }}';
                                 }
                             } else {
-                                $out = rex_i18n::msg('poll_vote_fail');
+                                $out = '{{ poll_vote_fail }}';
                             }
                         } else {
                             $out = '<div class="rex-poll-voting"> ' . $this->getFormByType() . '</div> ';
                         }
                     }
                 } else {
-                    $out = '<p>' . rex_i18n::msg('poll_finished') . '</p>';
+                    $out = '<p>{{ poll_finished }}</p>';
                 }
 
                 return $out;
@@ -287,7 +287,7 @@ class rex_poll extends \rex_yform_manager_dataset
                         $out = '<div class="rex-poll-voting"> ' . $this->getFormByType() . '</div> ';
                     }
                 } else {
-                    $out = '<p>' . rex_i18n::msg('poll_finished') . '</p>';
+                    $out = '<p>{{ poll_finished }}</p>';
                 }
 
                 return $out;
