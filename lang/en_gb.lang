@@ -54,3 +54,5 @@ poll_validate_email = Please enter a valid email address
 poll_validate_option = Please select an option
 
 statistics = Statistics
+comment = comment
+with_comment = with comment

@@ -6,23 +6,26 @@ class rex_poll extends \rex_yform_manager_dataset
 
     public function showResult()
     {
-        $hash = rex_request('hash', 'string') != '' ? rex_request('hash', 'string') : rex_poll_user::getHash();
+        $hash = '' != rex_request('hash', 'string') ? rex_request('hash', 'string') : rex_poll_user::getHash();
 
         //always=0,ifvoted=1,never=2,ifended=3
-        if ($this->showresult == 0) {
+        if (0 == $this->showresult) {
             return true;
-        } elseif ($this->showresult == 2) {
+        }
+        if (2 == $this->showresult) {
             return false;
-        } elseif ($this->showresult == 3 && $this->status == 0) {
+        }
+        if (3 == $this->showresult && 0 == $this->status) {
             return true;
-        } elseif ($this->showresult == 1) {
-            if($this->type == 'direct' && rex_request('vote_success','string') == '1'){
+        }
+        if (1 == $this->showresult) {
+            if ('direct' == $this->type && '1' == rex_request('vote_success', 'string')) {
                 return true;
             }
-            else if($this->type == 'hash' && rex_poll_user::getVote($this, $hash)){
+            if ('hash' == $this->type && rex_poll_user::getVote($this, $hash)) {
                 return true;
             }
-            else if($this->type == 'email' && rex_poll_user::getVote($this, $hash)){
+            if ('email' == $this->type && rex_poll_user::getVote($this, $hash)) {
                 return true;
             }
         }
@@ -34,18 +37,18 @@ class rex_poll extends \rex_yform_manager_dataset
         $hits = 0;
         foreach ($this->getOptions() as $option) {
             $hits = $hits + $option->getHits();
-        };
+        }
         return $hits;
     }
 
-    public function executeVote($option_id, $hash)
+    public function executeVote($option_id, $hash, $comment = '')
     {
-        if ($this->status == 0) {
+        if (0 == $this->status) {
             return false;
         }
-        switch ($this->type) {
 
-            case "hash":
+        switch ($this->type) {
+            case 'hash':
                 if (rex_poll_user::getVote($this, $hash)) {
                     return false;
                 }
@@ -53,13 +56,13 @@ class rex_poll extends \rex_yform_manager_dataset
                 if (!empty($option_id)) {
                     if ($this->checkOptionById($option_id)) {
                         $vote = rex_poll_vote::create();
-                        $vote->poll_id = $this->id;
+                        $vote->poll_id = $this->getId();
                         $vote->status = 1;
                         $vote->option_id = $option_id;
                         $vote->user_hash = $hash;
+                        $vote->comment = $comment;
 
-                        if ($vote->save()) {
-                        } else {
+                        if (!$vote->save()) {
                             dump(implode('<br>', $vote->getMessages()));
                             return false;
                         }
@@ -67,7 +70,7 @@ class rex_poll extends \rex_yform_manager_dataset
                 }
                 break;
 
-            case "email":
+            case 'email':
 
                 if (rex_poll_user::getVote($this, $hash)) {
                     return false;
@@ -76,13 +79,13 @@ class rex_poll extends \rex_yform_manager_dataset
                 if (!empty($option_id)) {
                     if ($this->checkOptionById($option_id)) {
                         $vote = rex_poll_vote::create();
-                        $vote->poll_id = $this->id;
+                        $vote->poll_id = $this->getId();
                         $vote->status = 0;
                         $vote->option_id = $option_id;
                         $vote->user_hash = $hash;
+                        $vote->comment = $comment;
 
-                        if ($vote->save()) {
-                        } else {
+                        if (!$vote->save()) {
                             dump(implode('<br>', $vote->getMessages()));
                             return false;
                         }
@@ -94,12 +97,12 @@ class rex_poll extends \rex_yform_manager_dataset
                 if (!empty($option_id)) {
                     if ($this->checkOptionById($option_id)) {
                         $vote = rex_poll_vote::create();
-                        $vote->poll_id = $this->id;
+                        $vote->poll_id = $this->getId();
                         $vote->status = 1;
                         $vote->option_id = $option_id;
+                        $vote->comment = $comment;
 
-                        if ($vote->save()) {
-                        } else {
+                        if (!$vote->save()) {
                             dump(implode('<br>', $vote->getMessages()));
                             return false;
                         }
@@ -110,26 +113,23 @@ class rex_poll extends \rex_yform_manager_dataset
         return true;
     }
 
-    public
-    function checkOptionById($id)
+    public function checkOptionById($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
         $option = rex_poll_option::get($id);
-        if ($option && $option->poll_id == $this->id) {
+        if ($option && $option->poll_id == $this->getId()) {
             return true;
         }
 
         return false;
     }
 
-    public
-    function getOptions($sortedby = 'hits')
+    public function getOptions($sortedby = 'hits')
     {
         return $this->getRelatedCollection('options');
     }
 
-    public
-    function getOptionsSorted($sortedby = 'hits')
+    public function getOptionsSorted($sortedby = 'hits')
     {
         $options = $this->getOptions();
         // TODO: $sortedby // hits / alphanum /
@@ -140,94 +140,101 @@ class rex_poll extends \rex_yform_manager_dataset
     {
         $gt = rex_sql::factory();
         $gt->setQuery('select * from ' . rex::getTablePrefix() . 'yform_email_template where id=:id', [':id' => $id]);
-        if ($gt->getRows() == 1) {
+        if (1 == $gt->getRows()) {
             $b = $gt->getArray();
             return current($b);
         }
         return false;
     }
 
-    public
-    function getFormByType()
+    public function getFormByType()
     {
         $options = [];
         foreach ($this->getRelatedCollection('options') as $option) {
-            $options[] = $option->title . '=' . $option->id;
+            $options[] = $option->title . '=' . $option->getId();
+        }
+
+        $comment = '';
+        if (1 == $this->getValue('comment')) {
+            $comment = 'textarea|poll-comment|{{ comment }}';
         }
 
         switch ($this->type) {
-            case "hash":
+            case 'hash':
                 $form_data = '
-                    hidden|poll-id|' . $this->id . '
-                        
+                    hidden|poll-id|' . $this->getId() . '
+
                     html|poll-question|<h2>' . $this->description . '</h2>
                     radio|poll-option||' . implode(',', $options) . '
-                    
+
                     validate|empty|poll-option|' . rex_i18n::msg('poll_validate_option') . '
-                    
-                    action|poll_executevote|poll-id|poll-option
+
+                    ' . $comment . '
+
+                    action|poll_executevote|poll-id|poll-option||poll-comment
                     action|showtext|<p>' . rex_i18n::msg('poll_vote_success') . '</p>|||1
                 ';
                 break;
-            case "email":
+            case 'email':
                 $form_data = '
-                    hidden|poll-id|' . $this->id . '
+                    hidden|poll-id|' . $this->getId() . '
                     hidden|poll-title|' . $this->title . '|no-db
                     hidden|poll-link||no-db
 
                     html|poll-question|<h2>' . $this->description . '</h2>
-                    
+
                     radio|poll-option||' . implode(',', $options) . '
-                    
+
                     html|email_note|<p> ' . rex_i18n::msg('poll_email_note') . '</p>
                     text|poll-email|' . rex_i18n::msg('poll_email_label') . '
-                    
+
                     validate|empty|poll-option|' . rex_i18n::msg('poll_validate_option') . '
                     validate|empty|poll-email|' . rex_i18n::msg('poll_validate_email') . '
                     validate|email|poll-email|' . rex_i18n::msg('poll_validate_email') . '
-                    
-                    checkbox|Datenschutz|<p>Ich habe die <a target="_blank" rel="noopener" href="'.rex_getUrl(120).'">Datenschutzerklärung</a> zur Kenntnis genommen.</p>|0,1|0|no_db
-                    validate|empty|Datenschutz|Bitte bestätigen Sie, dass Sie die Datenschutzerklärung zur Kenntnis genommen haben und stimmen Sie der elektronischen Verwendung Ihrer Daten zur Abstimmung zu.
 
-                    action|poll_executevote|poll-id|poll-option|poll-email|'.$this->emailtemplate.'
+                    ' . $comment . '
+
+                    checkbox|ds|{{ poll_datenschutz_checkbox }}|0,1|0|no_db
+                    validate|empty|ds|{{ poll_datenschutz_checkbox_error }}
+
+                    action|poll_executevote|poll-id|poll-option|poll-email|' . $this->getValue('emailtemplate') . '|poll-comment
                     action|showtext|<p>' . rex_i18n::msg('poll_vote_confirm') . '</p>|||1
                 ';
                 break;
             default:
                 $form_data = '
-                    hidden|poll-id|' . $this->id . '
-                        
+                    hidden|poll-id|' . $this->getId() . '
+
                     html|poll-question|<h2>' . $this->description . '</h2>
                     radio|poll-option||' . implode(',', $options) . '
-                    
+
                     validate|empty|poll-option|' . rex_i18n::msg('poll_validate_option') . '
-                    
-                    action|poll_executevote|poll-id|poll-option
+
+                    ' . $comment . '
+
+                    action|poll_executevote|poll-id|poll-option||poll-comment
                     action|showtext|<p>' . rex_i18n::msg('poll_vote_success') . '</p>|||1
                 ';
         }
 
         $yform = new rex_yform();
-//        $yform->setDebug(TRUE);
-        $form_data = trim(str_replace("<br />", "", rex_yform::unhtmlentities($form_data)));
+        $form_data = trim(str_replace('<br />', '', rex_yform::unhtmlentities($form_data)));
         $yform->setFormData($form_data);
-        $yform->SetObjectparams("form_action", rex_getUrl(rex_article::getCurrentId(), rex_clang::getCurrentId()));
-        $yform->SetObjectparams("form_class", 'form-voting');
-        $yform->SetObjectparams("real_field_names", true);
+        $yform->SetObjectparams('form_action', rex_getUrl(rex_article::getCurrentId(), rex_clang::getCurrentId()));
+        $yform->SetObjectparams('form_class', 'form-voting');
+        $yform->SetObjectparams('real_field_names', true);
 
         return $yform->getForm();
     }
 
-    public
-    function getOutput()
+    public function getOutput()
     {
         $out = '';
 
         switch ($this->type) {
+            case 'hash':
 
-            case "hash":
-
-                if ($this->status == 1) {
+                if (1 == $this->status) {
                     if (!rex::isBackend()) {
                         $vote = rex_poll_user::getVote($this, rex_poll_user::getHash());
                         if ($vote) {
@@ -242,16 +249,16 @@ class rex_poll extends \rex_yform_manager_dataset
 
                 return $out;
 
-            case "email":
+            case 'email':
 
                 $hash = rex_request('hash', 'string') ? rex_request('hash', 'string') : '';
 
-                if ($this->status == 1) {
-                    if(!rex::isBackend()){
-                        if ($hash != '') {
+                if (1 == $this->status) {
+                    if (!rex::isBackend()) {
+                        if ('' != $hash) {
                             $vote = rex_poll_user::getVote($this, $hash);
                             if ($vote) {
-                                if ($vote->status == 0) {
+                                if (0 == $vote->status) {
                                     if ($vote->activate()) {
                                         $out = rex_i18n::msg('poll_vote_success');
                                     } else {
@@ -275,7 +282,7 @@ class rex_poll extends \rex_yform_manager_dataset
 
             default:
 
-                if ($this->status == 1) {
+                if (1 == $this->status) {
                     if (!rex::isBackend()) {
                         $out = '<div class="rex-poll-voting"> ' . $this->getFormByType() . '</div> ';
                     }
@@ -285,7 +292,5 @@ class rex_poll extends \rex_yform_manager_dataset
 
                 return $out;
         }
-
-
     }
 }
