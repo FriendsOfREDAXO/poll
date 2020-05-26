@@ -20,13 +20,12 @@ if (0 < count($modules)) {
     ]);
 
 } else {
-    $gm->setQuery('insert into rex_module set name = :name, input = :input, output = :output, updatedate = :updatedate, updateuser = :updateuser where id = :module_id', [
+    $gm->setQuery('insert into rex_module set name = :name, input = :input, output = :output, updatedate = :updatedate, updateuser = :updateuser', [
         ':name' => $yform_module_name,
         ':input' => rex_file::get(rex_path::addon('poll', 'module/module_input.inc')),
         ':output' => rex_file::get(rex_path::addon('poll', 'module/module_output.inc')),
         ':updatedate' => date('Y-m-d H:i:s'),
         ':updateuser' => 'poll-addon',
-        ':module_id' => $modules[0]['id'],
     ]);
 
 }
