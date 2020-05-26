@@ -151,7 +151,9 @@ class rex_poll extends \rex_yform_manager_dataset
     {
         $options = [];
         foreach ($this->getRelatedCollection('options') as $option) {
-            $options[] = $option->title . '=' . $option->getId();
+            $fragment = new rex_fragment();
+            $fragment->setVar('option', $option);
+            $options[] = $fragment->parse('addons/poll/option.php');
         }
 
         $comment = '';
@@ -162,6 +164,7 @@ class rex_poll extends \rex_yform_manager_dataset
         switch ($this->type) {
             case 'hash':
                 $form_data = '
+                    objparams|submit_btn_label|{{ poll_submit_poll }}
                     hidden|poll-id|' . $this->getId() . '
 
                     html|poll-question|<h2>' . $this->description . '</h2>
@@ -177,6 +180,7 @@ class rex_poll extends \rex_yform_manager_dataset
                 break;
             case 'email':
                 $form_data = '
+                    objparams|submit_btn_label|{{ poll_submit_poll }}
                     hidden|poll-id|' . $this->getId() . '
                     hidden|poll-title|' . $this->title . '|no-db
                     hidden|poll-link||no-db
@@ -203,6 +207,7 @@ class rex_poll extends \rex_yform_manager_dataset
                 break;
             default:
                 $form_data = '
+                    objparams|submit_btn_label|{{ poll_submit_poll }}
                     hidden|poll-id|' . $this->getId() . '
 
                     html|poll-question|<h2>' . $this->description . '</h2>
