@@ -167,7 +167,7 @@ class rex_poll extends \rex_yform_manager_dataset
                     hidden|poll-id|' . $this->getId() . '
 
                     html|poll-question|<h2>' . $this->description . '</h2>
-                    choice|poll-option||' . $options . '|1|0|||||||||0|
+                    choice|poll-option||' . $options . '|1|0
 
                     validate|empty|poll-option|{{ poll_validate_option }}
 
@@ -186,7 +186,7 @@ class rex_poll extends \rex_yform_manager_dataset
 
                     html|poll-question|<h2>' . $this->description . '</h2>
 
-                    choice|poll-option||' . $options . '|1|0|||||||||0|
+                    choice|poll-option||' . $options . '|1|0
 
                     html|email_note|<p>{{ poll_email_note }}</p>
                     text|poll-email|{{ poll_email_label }}
@@ -210,7 +210,7 @@ class rex_poll extends \rex_yform_manager_dataset
                     hidden|poll-id|' . $this->getId() . '
 
                     html|poll-question|<h2>' . $this->description . '</h2>
-                    choice|poll-option||' . $options . '|1|0|||||||||0|
+                    choice|poll-option||' . $options . '|1|0
 
                     validate|empty|poll-option|{{ poll_validate_option }}
 
