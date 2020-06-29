@@ -54,3 +54,5 @@ poll_validate_email = Ange en giltig e-postadress
 poll_validate_option = Välj ett alternativ
 
 statistics = Statistik
+comment = Kommentar
+with_comment = Med kommentar
