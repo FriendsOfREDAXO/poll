@@ -151,10 +151,9 @@ class rex_poll extends \rex_yform_manager_dataset
     {
         $options = [];
         foreach ($this->getRelatedCollection('options') as $option) {
-            $fragment = new rex_fragment();
-            $fragment->setVar('option', $option);
-            $options[] = $fragment->parse('addons/poll/option.php');
+            $options[$option->title] = $option->getId();
         }
+        $options = json_encode($options);
 
         $comment = '';
         if (1 == $this->getValue('comment')) {
@@ -168,7 +167,7 @@ class rex_poll extends \rex_yform_manager_dataset
                     hidden|poll-id|' . $this->getId() . '
 
                     html|poll-question|<h2>' . $this->description . '</h2>
-                    radio|poll-option||' . implode(',', $options) . '
+                    choice|poll-option||' . $options . '|1|0
 
                     validate|empty|poll-option|{{ poll_validate_option }}
 
@@ -187,7 +186,7 @@ class rex_poll extends \rex_yform_manager_dataset
 
                     html|poll-question|<h2>' . $this->description . '</h2>
 
-                    radio|poll-option||' . implode(',', $options) . '
+                    choice|poll-option||' . $options . '|1|0
 
                     html|email_note|<p>{{ poll_email_note }}</p>
                     text|poll-email|{{ poll_email_label }}
@@ -198,7 +197,7 @@ class rex_poll extends \rex_yform_manager_dataset
 
                     ' . $comment . '
 
-                    checkbox|ds|{{ poll_datenschutz_checkbox }}|0,1|0|no_db
+                    checkbox|ds|{{ poll_datenschutz_checkbox }}|0|no_db
                     validate|empty|ds|{{ poll_datenschutz_checkbox_error }}
 
                     action|poll_executevote|poll-id|poll-option|poll-email|' . $this->getValue('emailtemplate') . '|poll-comment
@@ -211,7 +210,7 @@ class rex_poll extends \rex_yform_manager_dataset
                     hidden|poll-id|' . $this->getId() . '
 
                     html|poll-question|<h2>' . $this->description . '</h2>
-                    radio|poll-option||' . implode(',', $options) . '
+                    choice|poll-option||' . $options . '|1|0
 
                     validate|empty|poll-option|{{ poll_validate_option }}
 
