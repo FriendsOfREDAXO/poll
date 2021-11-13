@@ -1,7 +1,8 @@
 # Changelog
 
-## Version 1.4.1 (13.11.2021)
+## Version 1.4.2 (13.11.2021)
 * Installation korrigiert
+* debug entfernt
 
 ## Version 1.4 (26.05.2020)
 

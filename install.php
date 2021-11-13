@@ -6,7 +6,7 @@ $searchtext = 'module:poll_basic_output';
 $yform_module_name = 'translate:poll_module';
 
 $gm = rex_sql::factory();
-$gm->setDebug();
+//$gm->setDebug();
 $gm->setQuery('select * from rex_module where output LIKE ?', ['%' . $searchtext . '%']);
 $modules = $gm->getArray();
 
