@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.4.2 (13.11.2021)
+* Installation korrigiert
+* debug entfernt
+
 ## Version 1.4 (26.05.2020)
 
 * Vor einem Update darauf achten, dass sich Sprachschlüssel, Fragmente und Abhängigkeiten verändert haben.
@@ -8,7 +12,6 @@
 * Versionsabgängigkeit nun YForm 3
 * Umbau auf Fragmente.
 * Sprachkeys fürs Frontend gesetzt
-* Installation korrigiert
 
 ## Version 1.3.5 (14.08.2019)
 
