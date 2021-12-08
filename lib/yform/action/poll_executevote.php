@@ -9,7 +9,7 @@
 
 class rex_yform_action_poll_executevote extends rex_yform_action_abstract
 {
-    public function executeAction()
+    public function executeAction(): void
     {
         $pollId = $this->params['value_pool']['sql'][$this->getElement(2)];
         $optionId = $this->params['value_pool']['sql'][$this->getElement(3)];
@@ -42,11 +42,11 @@ class rex_yform_action_poll_executevote extends rex_yform_action_abstract
                         $etpl['mail_to_name'] = $email;
 
                         if (!rex_yform_email_template::sendMail($etpl)) {
-                            return false;
+                            return;
                         }
                     }
 
-                    return false;
+                    return;
                 }
             }
         }
@@ -54,7 +54,7 @@ class rex_yform_action_poll_executevote extends rex_yform_action_abstract
 
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return 'action|poll_executevote|label poll id|label option|label email|email template|comment';
     }
