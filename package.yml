@@ -1,7 +1,7 @@
 package: poll
 version: '1.4.2'
 author: Friends Of REDAXO
-supportpage: www.github.org/friendsofredaxo/poll
+supportpage: https://github.com/friendsofredaxo/poll
 
 page:
     title: translate:poll_settings
