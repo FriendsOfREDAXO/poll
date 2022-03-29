@@ -6,6 +6,8 @@ Erstellt und verwaltet Umfragen in REDAXO 5, bei Bedarf mit E-Mailbestätigung.
 
 ## Installation
 
+Installationsvoraussetzungen: YForm >3.0, REDAXO ^5.3 
+
 * Ins Backend einloggen und mit dem Installer installieren
 
 ### Ablauf
@@ -18,3 +20,11 @@ Erstellt und verwaltet Umfragen in REDAXO 5, bei Bedarf mit E-Mailbestätigung.
 ## Changelog
 
 Siehe [CHANGELOG.md](CHANGELOG.md).
+
+## Lizenz
+
+[MIT Lizenz](LICENSE.md)
+
+## Autor
+
+* [@FriendsOfREDAXO](https://github.com/FriendsOfREDAXO/poll/graphs/contributors)
