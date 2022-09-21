@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.0.0 (DD.MM.YYYY)
+- Pro Umfrage können mehrere Fragen gestellt werden
+- Fragen können auch per Texteingabe vom Benutzer beantwortet werden (keine Auswahloptionen erstellen)
+
 ## Version 1.4.3 (29.03.2022)
 * Fix for YForm 4 
 

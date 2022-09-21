@@ -1,9 +1,11 @@
 <?php
 
+use Poll\Poll;
+
 echo rex_view::title($this->i18n('poll'));
 
 $polls = [];
-foreach (rex_poll::getAll() as $poll) {
+foreach (Poll::getAll() as $poll) {
 
     $fragment = new rex_fragment();
     $fragment->setVar('poll', $poll);
@@ -15,5 +17,5 @@ $content = '<div class="rex-poll"><div class="polls">' . implode('', $polls) . '
 
 $fragment = new rex_fragment();
 $fragment->setVar('title', $this->i18n('statistics'), false);
-$fragment->setVar('body', $content, false);
+$fragment->setVar('content', $content, false);
 echo $fragment->parse('core/page/section.php');

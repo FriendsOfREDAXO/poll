@@ -1,5 +1,8 @@
 <?php
 
+use Poll\Poll;
+use Poll\User;
+
 /**
  * yform.
  *
@@ -12,27 +15,40 @@ class rex_yform_action_poll_executevote extends rex_yform_action_abstract
     public function executeAction(): void
     {
         $pollId = $this->params['value_pool']['sql'][$this->getElement(2)];
-        $optionId = $this->params['value_pool']['sql'][$this->getElement(3)];
-        $email = isset($this->params['value_pool']['sql'][$this->getElement(4)]) ? $this->params['value_pool']['sql'][$this->getElement(4)] : '';
+        $email = isset($this->params['value_pool']['sql'][$this->getElement(3)]) ? $this->params['value_pool']['sql'][$this->getElement(3)] : '';
+        $templateId = $this->getElement(4);
         $comment = isset($this->params['value_pool']['sql'][$this->getElement(5)]) ? $this->params['value_pool']['sql'][$this->getElement(5)] : '';
 
-        $templateId = $this->getElement(5);
 
-        $poll = rex_poll::get($pollId);
+        $poll = Poll::get($pollId);
         if ($poll) {
-
-            $hash = rex_poll_user::getHash();
+            $hash = User::getHash();
             if ($email != '') {
-                $hash = rex_poll_user::getHash($email . $poll->getId() . rex::getProperty('instname'));
+                $hash = User::getHash($email.$poll->getId().rex::getProperty('instname'));
             }
 
-            if ($poll->executeVote($optionId, $hash, $comment)) {
-                if ($poll->type == 'direct') {
+            $answers = [];
+            foreach ($poll->getQuestions() as $question) {
+                $choices = $question->getChoices();
+                if ($choices->isEmpty()) {
+                    if (isset($this->params['value_pool']['sql']['poll-question-'.$question->getId().'-answer'])) {
+                        $answers[$question->getId()]['text'] = $this->params['value_pool']['sql']['poll-question-'.$question->getId().'-answer'];
+                    }
+                } else {
+                    foreach ($question->getChoices() as $choice) {
+                        if (isset($this->params['value_pool']['sql']['poll-question-'.$question->getId().'-choice'])) {
+                            $answers[$question->getId()]['choice_id'] = $this->params['value_pool']['sql']['poll-question-'.$question->getId().'-choice'];
+                        }
+                    }
+                }
+            }
+
+            if ($poll->executeVote($answers, $hash, $comment)) {
+                if ($poll->getType() == 'direct') {
                     $_REQUEST['vote_success'] = true;
                 }
-                if ($poll->type == 'email') {
+                if ($poll->getType() == 'email') {
                     $this->params['value_pool']['email']['poll-link'] = rtrim(rex::getServer(), "/") . rex_getUrl(rex_article::getCurrentid(), rex_clang::getCurrentid(), ['hash' => $hash]);
-
 
                     $etpl = $poll->getEmailTemplateById($templateId);
                     if($etpl){
@@ -56,6 +72,6 @@ class rex_yform_action_poll_executevote extends rex_yform_action_abstract
 
     public function getDescription(): string
     {
-        return 'action|poll_executevote|label poll id|label option|label email|email template|comment';
+        return 'action|poll_executevote|label poll id|label email|email template|comment';
     }
 }

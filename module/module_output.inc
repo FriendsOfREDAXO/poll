@@ -1,12 +1,13 @@
 <?php
-
 /*
- * module:poll_basic_output v1.2
+ * module:poll_basic_output v2.0.0
  */
 
-$poll_id = (int) 'REX_VALUE[1]';
+use Poll\Poll;
 
-$poll = rex_poll::get($poll_id);
+$pollId = (int) 'REX_VALUE[1]';
+
+$poll = Poll::get($pollId);
 if ($poll) {
     $fragment = new rex_fragment();
     $fragment->setVar('poll', $poll);
