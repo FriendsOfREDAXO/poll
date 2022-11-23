@@ -1,10 +1,10 @@
 package: poll
-version: '1.4.3'
+version: '2.0.0-dev'
 author: Friends Of REDAXO
 supportpage: https://github.com/friendsofredaxo/poll
 
 page:
-    title: translate:poll_settings
+    title: translate:poll_statistic
     pjax: true
     block: poll
     icon: rex-icon fa-hand-spock-o
@@ -14,5 +14,5 @@ page:
 
 requires:
     packages:
-        yform: '>3'
+        yform: '>4'
     redaxo: '^5.3'

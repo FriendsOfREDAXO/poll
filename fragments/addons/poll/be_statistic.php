@@ -1,31 +1,61 @@
 <?php
 
+use Poll\Poll;
+use Poll\Vote\Answer;
+
+/** @var Poll $poll */
 $poll = $this->poll;
 
 $hits_all = $poll->getHits();
 
-$results = '';
+$items = [];
 if ($hits_all > 0) {
-    foreach ($poll->getOptions() as $option) {
-        $hits = $option->getHits();
+    foreach ($poll->getQuestions() as $question) {
+        $result = [];
+        $choices = $question->getChoices();
+        if ($choices->isEmpty()) {
+            /** @var Answer[] $answers */
+            $answers = $question->getAnswers();
 
-        $percent = (int) ($hits / $hits_all * 100);
-        $results .= '
-<div class="progress bb-progress-thin">
-    <div class="progress-bar bb-blue-bg" role="progressbar" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100" data-percent="' . $percent . '">
-                    <span class="poll-vote-value">' . $percent . ' % [ ' . $option->getHits() .
-                    ' Stimmen ]</span> ' . $option->title . '</div>
-</div>
-';
+            $answerItems = [];
+            foreach ($answers as $answer) {
+                $answerItems[] = '<li><blockquote>'.rex_escape($answer->getText()).'</blockquote></li>';
+            }
+
+            $result[] = '<h4 class="poll-list-title">'.rex_i18n::msg('poll_answers').'</h4><ul class="poll-answer-list">'.implode('', $answerItems).'</ul>';
+        } else {
+            $hitsAll = $question->getHits();
+            foreach ($choices as $choice) {
+                $hits = $choice->getHits();
+                $percent = (int)($hits / $hitsAll * 100);
+
+                $result[] =
+                    '<div class="poll-progress" aria-valuenow="'.$percent.'" aria-valuemin="0" aria-valuemax="100">
+                        <span class="poll-progress-label">'.rex_escape($choice->getTitle()).'</span>
+                        <progress class="poll-progress-bar" value="'.$percent.'" max="100">'.$percent.'%</progress>
+                        <span class="poll-progress-value">'.$percent.'%<span>['.$hits.']</span></span>
+                    </div>';
+            }
+        }
+
+        $items[] =
+            '<li>
+                <h3 class="poll-title">'.$question->getTitle().'</h3>
+                '.implode('', $result).'
+            </li>';
     }
 } else {
-    $results .= '<p>Es liegen keine Abstimmungen vor.</p>';
+    $items[] = '<li>Es liegen keine Abstimmungen vor.</li>';
 }
 
-echo '
-<div class="poll">
-    <p class="poll-title"><h3>Umfrage: ' . $poll->title . '</h3></p>
-    <p class="poll-info">Status: ' . ('1' == $poll->status ? '<span class="poll-status-online" title="online"></span>' : '<span class="poll-status-offline" title="offline"></span>') . ' Antworten: ' . $hits_all . '</p>
-    <div class="poll-results">' . $results . '</div>
-</div>
-';
+echo
+    '<div class="poll">
+        <h2 class="poll-heading">'.rex_i18n::msg('poll').': '.$poll->getTitle().'</h2>
+        <dl class="poll-info-list">
+            <dt>'.rex_i18n::msg('poll_status').'</dt>
+            <dd>'.($poll->isOnline() ? '<span class="rex-online" title="online">'.rex_i18n::msg('poll_online').'</span>' : '<span class="rex-offline" title="offline">'.rex_i18n::msg('poll_offline').'</span>').'</dd>
+            <dt>'.rex_i18n::msg('poll_answers').'</dt>
+            <dd>'.$hits_all.'</dd>
+        </dl>
+        <ul class="poll-result-list">'.implode('', $items).'</ul>
+    </div>';

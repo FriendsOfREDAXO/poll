@@ -56,3 +56,26 @@ poll_validate_option = Bitte wähle eine Option
 statistics = Statistiken
 comment = Kommentar
 with_comment = Mit Kommentar
+
+
+poll_answers = Antworten
+poll_answer = Antwort
+poll_answer_text = Antworttext
+
+poll_questions = Fragen
+poll_question = Frage
+poll_question_image = Bild
+poll_question_description = Beschreibung
+poll_question_url = Link
+poll_question_url_info = inkl. https://
+
+poll_question_choices = Antwortmöglichkeiten
+poll_question_choice = Antwortmöglichkeit
+poll_question_no_choices = Wenn keine Antwortmöglichkeiten vorgegeben werden, wird ein Textfeld zur Beantwortung angezeigt.
+
+poll_status = Status
+
+poll_votes_answer = Umfragen Einträge mit Antworten
+poll_vote = Eintrag
+
+poll_error_please_choose_a_question = Bitte eine Frage auswählen

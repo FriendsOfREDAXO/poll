@@ -1,33 +1,89 @@
-.rex-poll .progress {
-    background-color: #324050;
+.rex-poll .polls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 }
-.rex-poll .progress-bar {
-    width: 0;
-    transition: 1s;
-    white-space: nowrap;
-    text-align: left;
-}
-.rex-poll .progress-bar span {
-    padding-left: 2em;
-}
+
 .rex-poll .poll {
-    padding:30px;
-    cursor:pointer;
+    padding: 20px;
 }
-.rex-poll .poll:hover{
-    background-color: #cfcfc4;
+
+.rex-poll progress {
+    height: 6px;
+    border-radius: 6px;
+    overflow: hidden;
+    -webkit-appearance: none;
 }
-.rex-poll .poll-status-online,
-.rex-poll .poll-status-offline {
-    border-radius:100%;
-    height:15px;
-    width:15px;
-    display: inline-block;
-    vertical-align: middle;
+.rex-poll ::-webkit-progress-bar {
+    background-color: #dfe3e9;
 }
-.rex-poll .poll-status-online {
-    background-color: #77dd77;
+.rex-poll ::-moz-progress-bar {
+    background-color: #4b9ad9;
 }
-.rex-poll .poll-status-offline {
-    background-color: #ff6961;
+.rex-poll ::-webkit-progress-value {
+    background-color: #4b9ad9;
+}
+
+.rex-poll .poll:nth-child(even) {
+    background-color: #f9fcff;
+}
+.rex-poll .poll-heading {
+    font-size: 140%;
+}
+.rex-poll .poll-info-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+.rex-poll .poll-info-list dt {
+    flex-shrink: 1;
+    flex-basis: 100px;
+}
+.rex-poll .poll-info-list dd {
+    flex-basis: calc(100% - 100px);
+}
+.rex-poll .poll-result-list {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+.rex-poll .poll-result-list > li {
+    margin-bottom: 2em;
+}
+.rex-poll .poll-title {
+    font-size: 115%;
+    font-weight: 600;
+}
+.rex-poll .poll-list-title {
+    font-size: 100%;
+    font-weight: 400;
+}
+.rex-poll .poll-progress {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: .75em;
+}
+.rex-poll .poll-progress-label {
+    flex-basis: 70%;
+}
+.rex-poll .poll-progress-bar {
+    flex-basis: 100%;
+    order: 3;
+}
+.rex-poll .poll-progress-value {
+    order: 2;
+    flex-basis: 30%;
+    text-align: right;
+}
+.rex-poll .poll-progress-value > span {
+    padding-left: 10px;
+}
+.rex-poll .poll-answer-list {
+    max-height: 500px;
+    overflow-y: scroll;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+.rex-poll .poll-answer-list blockquote {
+    font-size: 90%;
 }

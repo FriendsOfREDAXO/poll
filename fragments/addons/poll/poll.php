@@ -1,56 +1,74 @@
 <?php
 
-$poll = $this->poll;
-$hash = rex_request('hash', 'string') != '' ? rex_request('hash', 'string') : rex_poll_user::getHash();
+use Poll\Poll;
+use Poll\User;
 
-echo '<h1>{{ poll_title }}: ' . rex_escape($poll->title) . ' </h1> ';
+/** @var Poll $poll */
+$poll = $this->poll;
+$hash = rex_request('hash', 'string') != '' ? rex_request('hash', 'string') : User::getHash();
+
+echo '<h1>{{ poll_title }}: '.rex_escape($poll->getTitle()).'</h1> ';
+if ('' !== trim($poll->getDescription())) {
+    echo '<p>'.rex_escape(nl2br($poll->getDescription()), 'html_simplified').'</p> ';
+}
 
 echo $poll->getOutput();
 
 if ($poll->showResult($hash)) {
-    $hits_all = $poll->getHits() > 0 ? $poll->getHits() : 1;
-    $options = [];
-    foreach ($poll->getOptions() as $option) {
-        $hits = $option->getHits();
-        $percent = (int)($hits / $hits_all * 100);
+    $items = [];
+    foreach ($poll->getQuestions() as $question) {
+        $choices = $question->getChoices();
+
+        if ($choices->isEmpty()) {
+            continue;
+        }
 
         $description = '';
-        if(rex_media::get($option->media)){
-            $description = '<div class="poll-description">' . $option->description . '</div>';
+        if('' !== $question->getDescription()){
+            $description = '<div class="poll-description">'.$question->getDescription().'</div>';
         }
 
         $picture = '';
-        if(rex_media::get($option->media)){
-            $picture = '<div class="poll-picture"><img src="/media/'.$option->media.'"/></div>';
+        if(rex_media::get($question->media)){
+            $picture = '<div class="poll-picture"><img src="/media/'.$question->media.'"/></div>';
         }
 
         $link = '';
-        if(rex_media::get($option->media) && '' != $option->link){
-            $link = '<div class="poll-link"><a href="'.rex_getUrl($option->link).'">mehr Informationen</a></div>';
+        if('' != $question->getUrl()){
+            $link = '<div class="poll-link"><a href="'.$question->getUrl().'">mehr Informationen</a></div>';
         }
 
-        $options[] = '
-                    <li>
-                        <div class="poll-title">' . $option->title . '</div>
-                        '.$description.'
-                        '.$picture.'
-                        '.$link.'
-                        <div class="progress bb-progress-thin">
-                            <div class="progress-bar bb-blue-bg" role="progressbar" aria-valuenow="' . $percent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $percent . '%;">
-                                <span class="poll-vote-value"><span>' . $percent . ' %</span > [' . $option->getHits() . ']</span>
-                            </div>
-                        </div>
-                    </li>
-                 ';
+
+        $progressBar = [];
+        $hitsAll = $question->getHits();
+        foreach ($choices as $choice) {
+            $hits = $choice->getHits();
+            $percent = (int)($hits / $hitsAll * 100);
+
+            $progressBar[] =
+                '<div class="poll-progress-item" aria-valuenow="'.$percent.'" aria-valuemin="0" aria-valuemax="100">
+                    <span class="poll-progress-label">'.rex_escape($choice->getTitle()).'</span>
+                    <progress class="poll-progress-bar" value="'.$percent.'" max="100">'.$percent.'%</progress>
+                    <span class="poll-progress-value">'.$percent.'%<span>['.$hits.']</span></span>
+                </div>';
+        }
+
+        $items[] =
+            '<li>
+                <div class="poll-title">'.$question->getTitle().'</div>
+                '.$description.'
+                '.$picture.'
+                '.$link.'
+                <div class="poll-progress">
+                    '.implode('', $progressBar).'
+                </div>
+            </li>';
     }
 
-    echo '    <div class="rex-poll">
-                <div class="rex-poll-results">
-                    <h2>{{ poll_result }}</h2>
-                    ' . ($poll->getHits() > 0 ? '<p> {{ poll_votes_taken }} ' . $poll->getHits() . '</p>' : '') . '
-                    <ul> ' . implode('', $options) . '</ul>
-                </div>
-             </div>
-            ';
-
+    echo
+        '<div class="poll">
+            <h2>{{ poll_result }}</h2>
+            '.($poll->getHits() > 0 ? '<p>{{ poll_votes_taken }} '.$poll->getHits().'</p>' : '').'
+            <ul class="poll-result-list">'.implode('', $items).'</ul>
+        </div>';
 }
