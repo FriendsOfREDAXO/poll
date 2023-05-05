@@ -7,8 +7,8 @@ use Poll\Poll;
 
 $pollId = (int) 'REX_VALUE[1]';
 
-$poll = Poll::get($pollId);
-if ($poll) {
+if ($pollId > 0 && $poll = Poll::get($pollId)) 
+ {
     $fragment = new rex_fragment();
     $fragment->setVar('poll', $poll);
     echo $fragment->parse('addons/poll/poll.php');
