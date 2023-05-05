@@ -68,11 +68,12 @@ if ($poll->showResult($hash)) {
             </li>';
     }
 
-
-    echo
-    '<div class="poll">
+    if ($hitsAll != 0) {
+        echo
+        '<div class="poll">
             <h2>{{ poll_result }}</h2>
             ' . ($poll->getHits() > 0 ? '<p>{{ poll_votes_taken }} ' . $poll->getHits() . '</p>' : '') . '
             <ul class="poll-result-list">' . implode('', $items) . '</ul>
         </div>';
+    }
 }
