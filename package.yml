@@ -8,6 +8,7 @@ page:
     pjax: true
     block: poll
     icon: rex-icon fa-hand-spock-o
+    perm: poll[]
     subpages:
 #        main: { title: 'translate:poll_settings' }
         statistic: { title: 'translate:poll_statistic' }
