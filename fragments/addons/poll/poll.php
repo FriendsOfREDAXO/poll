@@ -16,6 +16,7 @@ echo $poll->getOutput();
 
 if ($poll->showResult($hash)) {
     $items = [];
+    $hitsAll = 0;
     foreach ($poll->getQuestions() as $question) {
         $choices = $question->getChoices();
 
