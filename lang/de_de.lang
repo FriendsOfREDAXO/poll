@@ -4,6 +4,7 @@ navigation_poll = Umfrage
 poll_finished = Die Umfrage ist beendet
 poll_main = Umfragen
 poll_statistic = Statistiken
+poll_dashboard = Dashboard
 poll_options = Umfrage Optionen
 poll_option = Option
 poll_error_pleasechooseapoll = Bitte eine Umfrage auswählen
@@ -17,6 +18,8 @@ poll_email_note = Für die Bestätigung deiner Wahl senden wir dir eine E-Mail. 
 
 poll_title = Umfrage
 poll_online = Online
+poll_status_active = Online
+poll_status_inactive = Offline  
 poll_type = Umfragetyp
 poll_type_direct = Umfrage direkt
 poll_type_email = Umfrage beschränkt (E-Mail)
@@ -79,3 +82,22 @@ poll_votes_answer = Umfragen Einträge mit Antworten
 poll_vote = Eintrag
 
 poll_error_please_choose_a_question = Bitte eine Frage auswählen
+
+# Dashboard Sprachvariablen
+poll_dashboard_summary = Zusammenfassung
+poll_dashboard_total_polls = Umfragen insgesamt
+poll_dashboard_active_polls = Aktive Umfragen
+poll_dashboard_total_votes = Gesamtstimmen
+poll_dashboard_votes_per_poll = Stimmen pro Umfrage
+poll_dashboard_detailed_results = Detaillierte Ergebnisse
+poll_dashboard_activity_over_time = Aktivitätsverlauf
+poll_select_poll_to_analyze = Umfrage zur Analyse auswählen
+poll_please_select = Bitte wählen
+poll_votes = Stimmen
+poll_votes_per_day = Stimmen pro Tag
+poll_option = Option
+poll_votes = Stimmen
+poll_percentage = Prozent
+poll_text_responses = Textantworten
+poll_no_text_responses = Keine Textantworten vorhanden
+poll_show_chart = Zeige Chart

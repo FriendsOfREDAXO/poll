@@ -4,16 +4,17 @@ author: Friends Of REDAXO
 supportpage: https://github.com/friendsofredaxo/poll
 
 page:
-    title: translate:poll_statistic
+    title: translate:poll_dashboard
     pjax: true
     block: poll
     icon: rex-icon fa-hand-spock-o
     perm: poll[]
     subpages:
-#        main: { title: 'translate:poll_settings' }
-        statistic: { title: 'translate:poll_statistic' }
+        dashboard: { title: 'translate:poll_dashboard' }
 
 requires:
     packages:
         yform: '>4'
-    redaxo: '^5.3'
+    redaxo: '^5.16.1'
+    php:
+        version: '>=8.1, <9'

@@ -32,4 +32,6 @@ rex_yform_manager_dataset::setModelClass('rex_poll_vote_answer', \Poll\Vote\Answ
 if (rex::isBackend() && rex::getUser()) {
     rex_view::addCssFile($this->getAssetsUrl('rex-poll.css'));
     rex_view::addJsFile($this->getAssetsUrl('rex-poll.js'));
+    rex_view::addCssFile($this->getAssetsUrl('poll-dashboard.css'));
+    rex_view::addJsFile($this->getAssetsUrl('poll-dashboard.js'));
 }

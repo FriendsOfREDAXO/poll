@@ -41,6 +41,7 @@ if ($poll->showResult($hash)) {
 
 
         $progressBar = [];
+        $progressBarOut = ''; // Initialisieren der Variable, um undefined zu vermeiden
         $hitsAll = $question->getHits();
         if ($hitsAll != 0) {
             foreach ($choices as $choice) {
