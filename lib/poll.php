@@ -4,52 +4,83 @@ namespace Poll;
 use Poll\Question\Choice;
 use Poll\Vote\Answer;
 
+/**
+ * Poll class for managing polls in REDAXO
+ * 
+ * @package Poll
+ */
 class Poll extends \rex_yform_manager_dataset
 {
     /**
-     * @param \rex_yform_manager_collection $items
+     * Populates questions for a collection of polls
      *
+     * @param \rex_yform_manager_collection $items
      * @return \rex_yform_manager_collection
      */
-    public static function populateQuestions(\rex_yform_manager_collection $items)
+    public static function populateQuestions(\rex_yform_manager_collection $items): \rex_yform_manager_collection
     {
         return $items->populateRelation('questions');
     }
 
     /**
+     * Gets questions associated with this poll
+     *
      * @return \rex_yform_manager_collection|Question[]
      */
-    public function getQuestions()
+    public function getQuestions(): \rex_yform_manager_collection
     {
         return $this->getRelatedCollection('questions');
     }
 
+    /**
+     * Gets poll description
+     *
+     * @return string
+     */
     public function getDescription(): string
     {
-        return $this->description;
+        return (string) $this->description;
     }
 
+    /**
+     * Gets poll title
+     *
+     * @return string
+     */
     public function getTitle(): string
     {
-        return $this->title;
+        return (string) $this->title;
     }
 
+    /**
+     * Gets poll type
+     *
+     * @return string
+     */
     public function getType(): string
     {
-        return $this->type;
+        return (string) $this->type;
     }
 
+    /**
+     * Checks if poll is online
+     *
+     * @return bool
+     */
     public function isOnline(): bool
     {
         return 1 == $this->status;
     }
 
-
-    // translate:poll_result_always=0,translate:poll_result_ifvoted=1,translate:poll_result_never=2,poll_result_ifended=3
-
-    public function showResult(): bool
+    /**
+     * Returns whether the poll result should be shown
+     *
+     * @param string|null $hash User hash
+     * @return bool
+     */
+    public function showResult(?string $hash = null): bool
     {
-        $hash = '' != rex_request('hash', 'string') ? rex_request('hash', 'string') : User::getHash();
+        $hash = $hash ?? (rex_request('hash', 'string') != '' ? rex_request('hash', 'string') : User::getHash());
 
         //always=0,ifvoted=1,never=2,ifended=3
         if (0 == $this->showresult) {
@@ -75,15 +106,13 @@ class Poll extends \rex_yform_manager_dataset
         return false;
     }
 
+    /**
+     * Gets number of votes for this poll
+     *
+     * @return int
+     */
     public function getHits(): int
     {
-        //$hits = Vote::query()
-        //    ->where('poll_id', $this->getId())
-        //    ->where('status', 1)
-        //    ->find();
-
-        //return count($hits);
-
         $hits = Answer::query()
             ->alias('a')
             ->joinRelation('vote_id', 'v')
@@ -96,7 +125,15 @@ class Poll extends \rex_yform_manager_dataset
         return count($hits);
     }
 
-    public function executeVote($answers, $hash, $comment = '')
+    /**
+     * Executes a vote for this poll
+     *
+     * @param array $answers The answers
+     * @param string $hash User hash
+     * @param string $comment Optional comment
+     * @return bool Success status
+     */
+    public function executeVote(array $answers, string $hash, string $comment = ''): bool
     {
         if (!$this->isOnline()) {
             return false;
@@ -105,12 +142,12 @@ class Poll extends \rex_yform_manager_dataset
         $cleanAnswers = [];
         foreach ($answers as $questionId => $answer) {
             if (isset($answer['choice_id'])) {
-                if ($this->checkChoiceByQuestionId($answer['choice_id'], $questionId)) {
-                    $cleanAnswers[$questionId]['choice_id'] = $answer['choice_id'];
+                if ($this->checkChoiceByQuestionId((int)$answer['choice_id'], (int)$questionId)) {
+                    $cleanAnswers[$questionId]['choice_id'] = (int)$answer['choice_id'];
                 }
             }
             if (isset($answer['text'])) {
-                if ($this->checkQuestion($questionId)) {
+                if ($this->checkQuestion((int)$questionId)) {
                     $cleanAnswers[$questionId]['text'] = $answer['text'];
                 }
             }
@@ -130,7 +167,7 @@ class Poll extends \rex_yform_manager_dataset
                     $vote->comment = $comment;
 
                     if (!$vote->save()) {
-                        dump(implode('<br>', $vote->getMessages()));
+                        // Dump error messages, consider changing to proper error logging
                         return false;
                     } else {
                         foreach ($cleanAnswers as $questionId => $cleanAnswer) {
@@ -153,7 +190,7 @@ class Poll extends \rex_yform_manager_dataset
                     $vote->comment = $comment;
 
                     if (!$vote->save()) {
-                        dump(implode('<br>', $vote->getMessages()));
+                        // Dump error messages, consider changing to proper error logging
                         return false;
                     } else {
                         foreach ($cleanAnswers as $questionId => $cleanAnswer) {
@@ -171,7 +208,7 @@ class Poll extends \rex_yform_manager_dataset
                     $vote->comment = $comment;
 
                     if (!$vote->save()) {
-                        dump(implode('<br>', $vote->getMessages()));
+                        // Dump error messages, consider changing to proper error logging
                         return false;
                     } else {
                         foreach ($cleanAnswers as $questionId => $cleanAnswer) {
@@ -184,7 +221,15 @@ class Poll extends \rex_yform_manager_dataset
         return true;
     }
 
-    private function executeAnswer($vote, $questionId, $cleanAnswer): void
+    /**
+     * Executes an answer for a vote
+     * 
+     * @param Vote $vote The vote
+     * @param int $questionId Question ID
+     * @param array $cleanAnswer Answer data
+     * @return void
+     */
+    private function executeAnswer(Vote $vote, int $questionId, array $cleanAnswer): void
     {
         $answer = Answer::create();
         $answer->vote_id = $vote->getId();
@@ -197,26 +242,37 @@ class Poll extends \rex_yform_manager_dataset
         }
 
         if (!$answer->save()) {
-            dump(implode('<br>', $answer->getMessages()));
             $vote->delete();
             return;
         }
     }
 
-    public function checkChoiceByQuestionId($choiceId, $questionId): bool
+    /**
+     * Checks if a choice belongs to a question in this poll
+     *
+     * @param int $choiceId Choice ID
+     * @param int $questionId Question ID
+     * @return bool
+     */
+    public function checkChoiceByQuestionId(int $choiceId, int $questionId): bool
     {
-        $choiceId = (int) $choiceId;
         $choice = Choice::get($choiceId);
         if ($choice && $choice->getQuestion() && $choice->getQuestion()->getPoll() &&
-            $choice->getQuestion()->getPoll()->getId() == $this->getId() && $choice->getQuestion()->getId() == (int)$questionId) {
+            $choice->getQuestion()->getPoll()->getId() == $this->getId() && $choice->getQuestion()->getId() == $questionId) {
             return true;
         }
 
         return false;
     }
-    public function checkQuestion($questionId): bool
+
+    /**
+     * Checks if a question belongs to this poll
+     *
+     * @param int $questionId Question ID
+     * @return bool
+     */
+    public function checkQuestion(int $questionId): bool
     {
-        $questionId = (int) $questionId;
         $question = Question::get($questionId);
         if ($question && $question->poll_id == $this->getId()) {
             return true;
@@ -225,7 +281,13 @@ class Poll extends \rex_yform_manager_dataset
         return false;
     }
 
-    public function getEmailTemplateById($id)
+    /**
+     * Gets email template by ID
+     *
+     * @param int $id Template ID
+     * @return array|false
+     */
+    public function getEmailTemplateById(int $id): array|false
     {
         $gt = \rex_sql::factory();
         $gt->setQuery('SELECT * FROM '.\rex::getTable('yform_email_template').' WHERE id=:id', [':id' => $id]);
@@ -236,7 +298,12 @@ class Poll extends \rex_yform_manager_dataset
         return false;
     }
 
-    public function getFormByType()
+    /**
+     * Returns the YForm object for this poll based on its type
+     *
+     * @return \rex_yform
+     */
+    public function getFormByType(): \rex_yform
     {
         $formDataQuestions = [];
         foreach ($this->getQuestions() as $question) {
@@ -319,12 +386,15 @@ class Poll extends \rex_yform_manager_dataset
         $yform->setObjectparams('form_class', 'form-voting');
         $yform->setObjectparams('real_field_names', false);
         $yform->setObjectparams('submit_btn_label', '{{ poll_submit_poll }}');
-        //$yform->setObjectparams('hide_top_warning_messages', true);
-        //$yform->setObjectparams('hide_field_warning_messages', false);
 
-        return $yform->getForm();
+        return $yform;
     }
 
+    /**
+     * Returns the HTML output for this poll
+     *
+     * @return string
+     */
     public function getOutput(): string
     {
         $out = '';
@@ -337,7 +407,8 @@ class Poll extends \rex_yform_manager_dataset
                         if ($vote) {
                             $out = '{{ poll_vote_exists }}';
                         } else {
-                            $out = '<div class="poll-voting"> ' . $this->getFormByType() . '</div> ';
+                            // Konvertiere das YForm-Objekt zu einem String über die getForm()-Methode
+                            $out = '<div class="poll-voting"> ' . $this->getFormByType()->getForm() . '</div> ';
                         }
                     }
                 } else {
@@ -347,7 +418,6 @@ class Poll extends \rex_yform_manager_dataset
                 return $out;
 
             case 'email':
-
                 $hash = rex_request('hash', 'string') ? rex_request('hash', 'string') : '';
 
                 if ($this->isOnline()) {
@@ -368,7 +438,8 @@ class Poll extends \rex_yform_manager_dataset
                                 $out = '{{ poll_vote_fail }}';
                             }
                         } else {
-                            $out = '<div class="poll-voting"> ' . $this->getFormByType() . '</div> ';
+                            // Konvertiere das YForm-Objekt zu einem String über die getForm()-Methode
+                            $out = '<div class="poll-voting"> ' . $this->getFormByType()->getForm() . '</div> ';
                         }
                     }
                 } else {
@@ -378,10 +449,10 @@ class Poll extends \rex_yform_manager_dataset
                 return $out;
 
             default:
-
                 if ($this->isOnline()) {
                     if (!\rex::isBackend()) {
-                        $out = '<div class="poll-voting"> ' . $this->getFormByType() . '</div> ';
+                        // Konvertiere das YForm-Objekt zu einem String über die getForm()-Methode
+                        $out = '<div class="poll-voting"> ' . $this->getFormByType()->getForm() . '</div> ';
                     }
                 } else {
                     $out = '<p>{{ poll_finished }}</p>';
@@ -389,5 +460,68 @@ class Poll extends \rex_yform_manager_dataset
 
                 return $out;
         }
+    }
+    
+    /**
+     * Gets statistics for a specific poll
+     *
+     * @return array Statistics data
+     */
+    public function getStatistics(): array
+    {
+        $statistics = [];
+        $statistics['total_votes'] = $this->getHits();
+        
+        // Statistik pro Frage
+        $questionStats = [];
+        foreach ($this->getQuestions() as $question) {
+            $questionData = [
+                'id' => $question->getId(),
+                'title' => $question->getTitle(),
+                'choices' => []
+            ];
+            
+            $choices = $question->getChoices();
+            if (!$choices->isEmpty()) {
+                foreach ($choices as $choice) {
+                    $count = Answer::query()
+                        ->alias('a')
+                        ->joinRelation('vote_id', 'v')
+                        ->where('a.question_choice_id', $choice->getId())
+                        ->where('v.poll_id', $this->getId())
+                        ->where('v.status', 1)
+                        ->count();
+                        
+                    $questionData['choices'][] = [
+                        'id' => $choice->getId(),
+                        'title' => $choice->getTitle(),
+                        'count' => $count,
+                        'percentage' => $statistics['total_votes'] > 0 ? round(($count / $statistics['total_votes']) * 100, 1) : 0
+                    ];
+                }
+            } else {
+                // Freie Textantworten
+                $answers = Answer::query()
+                    ->alias('a')
+                    ->joinRelation('vote_id', 'v')
+                    ->where('a.question_id', $question->getId())
+                    ->where('v.poll_id', $this->getId())
+                    ->where('v.status', 1)
+                    ->find();
+                    
+                $textAnswers = [];
+                foreach ($answers as $answer) {
+                    if ($answer->text) {
+                        $textAnswers[] = $answer->text;
+                    }
+                }
+                $questionData['text_answers'] = $textAnswers;
+            }
+            
+            $questionStats[] = $questionData;
+        }
+        
+        $statistics['questions'] = $questionStats;
+        return $statistics;
     }
 }
