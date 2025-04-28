@@ -33,6 +33,18 @@
         },
         
         /**
+         * Konvertiert HTML-Entities in Text zu tatsächlichem HTML
+         * Wird verwendet, um escaped HTML-Tags wie &lt;i class="fa"&gt; in echte Icons zu konvertieren
+         */
+        decodeHtmlEntities: function(text) {
+            if (!text || typeof text !== 'string') return text;
+            
+            var textArea = document.createElement('textarea');
+            textArea.innerHTML = text;
+            return textArea.value;
+        },
+        
+        /**
          * Initialisiert Event-Listener für Modal-Fenster
          */
         initModalEventListeners: function() {
@@ -158,7 +170,9 @@
                 
                 // Umfragetitel
                 var titleCell = document.createElement('td');
-                titleCell.textContent = labels[i] || '';
+                // HTML-Entitäten dekodieren, um die Icons korrekt anzuzeigen
+                var decodedLabel = PollDashboard.decodeHtmlEntities(labels[i] || '');
+                titleCell.innerHTML = decodedLabel;
                 titleCell.className = 'poll-bar-table-title';
                 row.appendChild(titleCell);
                 
@@ -255,24 +269,47 @@
                 return;
             }
             
-            // Container für die neue Flex-Layout-Struktur
-            var chartContainer = document.createElement('div');
-            chartContainer.className = 'poll-chart-flex-container';
-            chartContainer.style.display = 'flex';
-            chartContainer.style.flexDirection = 'row';
-            chartContainer.style.alignItems = 'center';
-            chartContainer.style.gap = '20px';
-            
-            // Größere Grafik im Modal
+            // Prüfen, ob wir im Modal sind
             var isModal = $(container).closest('.modal-body').length > 0;
-            var size = isModal ? 400 : 220; // Größeres Diagramm im Modal
-            var radius = size / 2;
+            
+            // Container für die neue Grid-Layout-Struktur (besser für 2-Spalten im Modal)
+            var chartContainer = document.createElement('div');
+            chartContainer.className = 'poll-chart-container';
+            
+            if (isModal) {
+                // Im Modal verwenden wir ein Grid-Layout für bessere Kontrolle
+                chartContainer.style.display = 'grid';
+                chartContainer.style.gridTemplateColumns = 'minmax(400px, 1fr) minmax(250px, 1fr)';
+                chartContainer.style.gridGap = '20px';
+                chartContainer.style.alignItems = 'start';
+                chartContainer.style.width = '100%';
+            } else {
+                // Außerhalb des Modals behalten wir das Flex-Layout bei
+                chartContainer.style.display = 'flex';
+                chartContainer.style.flexDirection = 'row';
+                chartContainer.style.alignItems = 'center';
+                chartContainer.style.gap = '20px';
+            }
+            
+            // Größe des Diagramms anpassen
+            var size = isModal ? 400 : 220;
+            var radius = size / 2 * 0.9; // Etwas kleiner als der halbe Container, um sicher zu gehen
             var center = size / 2;
             
             // SVG-Container erstellen
             var svgContainer = document.createElement('div');
             svgContainer.className = 'poll-pie-svg-container';
-            svgContainer.style.flexShrink = 0; // Verhindert das Schrumpfen
+            
+            if (isModal) {
+                // Im Modal: Container soll die volle Höhe haben und zentriert sein
+                svgContainer.style.width = '100%';
+                svgContainer.style.display = 'flex';
+                svgContainer.style.justifyContent = 'center';
+                svgContainer.style.alignItems = 'center';
+            } else {
+                // Normale Anzeige: Vermeide Schrumpfen
+                svgContainer.style.flexShrink = '0';
+            }
             
             // SVG-Element erstellen
             var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -281,11 +318,9 @@
             svg.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
             svg.setAttribute('class', 'poll-pie-svg');
             
-            // Kreisgruppe
-            var pieGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-            pieGroup.setAttribute('transform', 'translate(' + center + ',' + center + ')');
+            // Wir fügen jetzt die Kreissegmente direkt dem SVG hinzu, ohne eine zusätzliche Gruppe
             
-            // Startwinkel
+            // Startwinkel (in Grad)
             var startAngle = 0;
             
             // Erstelle für jeden Datenpunkt ein Segment
@@ -294,35 +329,39 @@
                 
                 var percentage = data[i] / total;
                 var angle = percentage * 360;
-                
-                // Kreissegment berechnen (SVG-Pfad)
-                var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                
-                // Arc-Pfad berechnen
                 var endAngle = startAngle + angle;
+                
+                // Berechne die Koordinaten für den Arc-Pfad
+                // Konvertiere Winkel in Radianten und berücksichtige die Verschiebung (-90 Grad)
                 var startRad = (startAngle - 90) * Math.PI / 180;
                 var endRad = (endAngle - 90) * Math.PI / 180;
                 
+                // Berechne die Punkte auf dem Kreisumfang
                 var x1 = center + radius * Math.cos(startRad);
                 var y1 = center + radius * Math.sin(startRad);
                 var x2 = center + radius * Math.cos(endRad);
                 var y2 = center + radius * Math.sin(endRad);
                 
-                // Große/kleine Bogen-Flag (größer/kleiner als 180 Grad)
+                // Flag für große Bogen (größer als 180 Grad)
                 var largeArcFlag = angle > 180 ? 1 : 0;
                 
-                // SVG-Pfad für das Kreissegment
+                // SVG-Pfad für das Kreissegment erstellen
+                var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                
+                // Pfad-Definition
                 var d = [
-                    'M', center, center,  // Bewege zum Zentrum
-                    'L', x1, y1,          // Linie zum Kreisrand
-                    'A', radius, radius, 0, largeArcFlag, 1, x2, y2, // Kreisbogen
-                    'Z'                   // Schließe Pfad
+                    'M', center, center,            // Bewege zum Zentrum
+                    'L', x1, y1,                    // Linie zum ersten Punkt am Kreisrand
+                    'A', radius, radius,            // Kreisbogen-Radien (x,y)
+                    0,                              // Rotationswinkel der Ellipse
+                    largeArcFlag,                   // Großer Bogen (1) oder kleiner Bogen (0)
+                    1,                              // Sweepflag (1 = im Uhrzeigersinn)
+                    x2, y2,                         // Endpunkt des Bogens
+                    'Z'                             // Schließe den Pfad zum Zentrum
                 ].join(' ');
                 
                 path.setAttribute('d', d);
                 path.setAttribute('fill', colors[i] || PollDashboard.getRandomColor());
-                
-                // Hover-Effekt hinzufügen
                 path.setAttribute('class', 'poll-pie-segment-path');
                 path.setAttribute('data-index', i);
                 
@@ -333,6 +372,8 @@
                     if (legendItem) {
                         legendItem.classList.add('poll-pie-legend-item-highlight');
                     }
+                    this.setAttribute('stroke', '#ffffff');
+                    this.setAttribute('stroke-width', '2');
                 });
                 
                 path.addEventListener('mouseleave', function() {
@@ -341,22 +382,43 @@
                     if (legendItem) {
                         legendItem.classList.remove('poll-pie-legend-item-highlight');
                     }
+                    this.setAttribute('stroke', 'none');
+                    this.setAttribute('stroke-width', '0');
                 });
                 
-                pieGroup.appendChild(path);
+                svg.appendChild(path);
                 
                 startAngle = endAngle; // Für das nächste Segment
             }
             
-            // SVG zum Container hinzufügen
-            svg.appendChild(pieGroup);
             svgContainer.appendChild(svg);
             
             // Legende erstellen
             var legend = document.createElement('div');
             legend.className = 'poll-pie-legend';
-            legend.style.flexGrow = '1'; // Erlaubt das Wachsen, um den verfügbaren Platz zu füllen
             
+            if (isModal) {
+                // Im Modal: Legende mit fester Breite und scrollbar
+                legend.style.width = '100%';
+                legend.style.maxHeight = size + 'px'; // Gleiche Höhe wie das SVG
+                legend.style.overflowY = 'auto';
+                legend.style.paddingRight = '10px';
+                legend.style.boxSizing = 'border-box';
+            } else {
+                // Normale Anzeige: Flexibel wachsen
+                legend.style.flexGrow = '1';
+            }
+            
+            // Titel für die Legende hinzufügen (nur im Modal)
+            if (isModal) {
+                var legendTitle = document.createElement('h4');
+                legendTitle.textContent = 'Legende';
+                legendTitle.style.marginTop = '0';
+                legendTitle.style.marginBottom = '10px';
+                legend.appendChild(legendTitle);
+            }
+            
+            // Legendeneinträge erstellen
             for (var j = 0; j < data.length; j++) {
                 if (data[j] === 0) continue;
                 
@@ -380,18 +442,20 @@
                 // Event-Listener für Hover-Effekt
                 legendItem.addEventListener('mouseenter', function() {
                     var index = this.getAttribute('data-index');
-                    var segment = container.querySelector('.poll-pie-segment-path[data-index="' + index + '"]');
+                    var segment = svg.querySelector('.poll-pie-segment-path[data-index="' + index + '"]');
                     if (segment) {
-                        segment.classList.add('poll-pie-segment-path-highlight');
+                        segment.setAttribute('stroke', '#ffffff');
+                        segment.setAttribute('stroke-width', '2');
                     }
                     this.classList.add('poll-pie-legend-item-highlight');
                 });
                 
                 legendItem.addEventListener('mouseleave', function() {
                     var index = this.getAttribute('data-index');
-                    var segment = container.querySelector('.poll-pie-segment-path[data-index="' + index + '"]');
+                    var segment = svg.querySelector('.poll-pie-segment-path[data-index="' + index + '"]');
                     if (segment) {
-                        segment.classList.remove('poll-pie-segment-path-highlight');
+                        segment.setAttribute('stroke', 'none');
+                        segment.setAttribute('stroke-width', '0');
                     }
                     this.classList.remove('poll-pie-legend-item-highlight');
                 });
@@ -399,11 +463,11 @@
                 legend.appendChild(legendItem);
             }
             
-            // Füge SVG und Legende zum Flex-Container hinzu
+            // Füge SVG und Legende zum Container hinzu
             chartContainer.appendChild(svgContainer);
             chartContainer.appendChild(legend);
             
-            // Leere den ursprünglichen Container und füge den Flex-Container hinzu
+            // Leere den ursprünglichen Container und füge den Chart-Container hinzu
             container.innerHTML = '';
             container.appendChild(chartContainer);
         },
