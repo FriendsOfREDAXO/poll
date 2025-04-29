@@ -86,7 +86,7 @@ Hier ist ein Beispiel für ein einfaches Poll-Modul:
 
 ### Anpassung des vorhandenen Moduls
 
-Um die Ausgabe des Fragments `addons/poll/poll.php` anzupassen, können Sie eine eigene Version erstellen:
+Um die Ausgabe des Fragments `addons/poll/poll.php` anzupassen, kann man eine eigene Version erstellen:
 
 ### Project-AddOn 
 1. Die Datei `/redaxo/src/addons/poll/fragments/addons/poll/poll.php` nach `/redaxo/src/addons/project/fragments/addons/poll/poll.php` kopieren
