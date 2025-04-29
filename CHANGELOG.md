@@ -1,8 +1,11 @@
 # Changelog
 
-## Version 2.0.0 (DD.MM.YYYY)
+## Version 2.0.0 (29.04.2025)
 - Pro Umfrage können mehrere Fragen gestellt werden
 - Fragen können auch per Texteingabe vom Benutzer beantwortet werden (keine Auswahloptionen erstellen)
+- Die Statistik wurde durch ein Dashboard ersetzt
+- Optimierungen für PHP >= 8.1
+- Readme aktualisiert
 
 ## Version 1.4.3 (29.03.2022)
 * Fix for YForm 4 
