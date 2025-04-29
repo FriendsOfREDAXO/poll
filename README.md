@@ -123,20 +123,6 @@ poll_datenschutz_checkbox;Ich stimme der Verarbeitung meiner Daten gemäß Daten
 poll_datenschutz_checkbox_error;Bitte stimmen Sie der Datenverarbeitung zu.
 ```
 
-
-### Beispiel für ein Kreisdiagramm
-
-Im Frontend:
-
-```php
-<div id="my-chart-id" class="poll-pie-chart" 
-    data-values='[42, 28, 14]' 
-    data-labels='["Option A", "Option B", "Option C"]' 
-    data-colors='["#4b9ad9", "#3a7fb8", "#286197"]'></div>
-```
-
-Das JavaScript erstellt daraus automatisch ein interaktives Kreisdiagramm mit Legende.
-
 ## Changelog
 
 Siehe [CHANGELOG.md](CHANGELOG.md).
