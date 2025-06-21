@@ -101,3 +101,15 @@ poll_percentage = Prozent
 poll_text_responses = Textantworten
 poll_no_text_responses = Keine Textantworten vorhanden
 poll_show_chart = Zeige Chart
+
+# Sample Data Language Variables
+poll_sample_data = Beispieldaten
+poll_sample_data_info = Beispiel-Umfrage installieren
+poll_sample_data_description = Installiere eine Beispiel-Umfrage "Batman vs Superman vs Wonder Woman", um das System besser zu verstehen und auszuprobieren.
+poll_sample_preview = Vorschau der Beispiel-Umfrage
+poll_sample_install_button = Beispiel-Umfrage installieren
+poll_sample_installed_success = Die Beispiel-Umfrage wurde erfolgreich installiert!
+poll_sample_install_error = Fehler beim Installieren der Beispiel-Umfrage
+poll_sample_already_exists = Eine Umfrage mit diesem Titel existiert bereits
+poll_sample_already_installed = Beispiel-Umfrage bereits installiert
+poll_sample_already_installed_desc = Die Beispiel-Umfrage wurde bereits installiert. Du kannst sie in der YForm-Verwaltung bearbeiten oder löschen.

@@ -1,0 +1,27 @@
+{
+  "title": "Batman vs Superman vs Wonder Woman",
+  "description": "Wer ist euer liebster Superheld? Stimmt ab für euren Favoriten!",
+  "type": "direct",
+  "status": 1,
+  "comment": 0,
+  "showresult": 1,
+  "questions": [
+    {
+      "title": "Wer ist euer liebster Superheld?",
+      "description": "Wählt aus den drei beliebtesten DC-Superhelden",
+      "media": "",
+      "url": "",
+      "choices": [
+        {
+          "title": "Batman - Der dunkle Ritter"
+        },
+        {
+          "title": "Superman - Der Mann aus Stahl"
+        },
+        {
+          "title": "Wonder Woman - Die Amazonin"
+        }
+      ]
+    }
+  ]
+}
