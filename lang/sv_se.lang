@@ -56,3 +56,15 @@ poll_validate_option = Välj ett alternativ
 statistics = Statistik
 comment = Kommentar
 with_comment = Med kommentar
+
+# Sample Data Language Variables
+poll_sample_data = Exempeldata
+poll_sample_data_info = Installera Exempelenkät
+poll_sample_data_description = Installera en exempelenkät "Batman vs Superman vs Wonder Woman" för att bättre förstå och prova systemet.
+poll_sample_preview = Förhandsvisning av Exempelenkät
+poll_sample_install_button = Installera Exempelenkät
+poll_sample_installed_success = Exempelenkäten har installerats framgångsrikt!
+poll_sample_install_error = Fel vid installation av exempelenkät
+poll_sample_already_exists = En enkät med denna titel finns redan
+poll_sample_already_installed = Exempelenkät redan installerad
+poll_sample_already_installed_desc = Exempelenkäten har redan installerats. Du kan redigera eller ta bort den i YForm-hanteringen.
