@@ -17,7 +17,7 @@ $success = '';
 $error = '';
 
 // Handle sample data installation
-if (rex_post('install_sample', 'boolean')) {
+if (rex_post('install_sample', 'boolean') && rex_csrf_token::factory('poll-sample')->isValid()) {
     try {
         // Load sample poll data
         $sampleData = json_decode(rex_file::get(rex_path::addon('poll', 'install/sample_poll.json')), true);
@@ -127,16 +127,15 @@ if ($existingPoll) {
     $content .= '<div class="panel panel-default">';
     $content .= '<div class="panel-body">';
     
-    $form = rex_form::factory(rex_form::class, 'poll-sample-form');
-    $form->addHidden('install_sample', '1');
-    
-    $form->addRawField('<div class="row">');
-    $form->addRawField('<div class="col-sm-12">');
-    $form->addRawField('<button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> ' . rex_i18n::msg('poll_sample_install_button') . '</button>');
-    $form->addRawField('</div>');
-    $form->addRawField('</div>');
-    
-    $content .= $form->get();
+    $content .= '<form method="post">';
+    $content .= rex_csrf_token::factory('poll-sample')->getHiddenField();
+    $content .= '<input type="hidden" name="install_sample" value="1">';
+    $content .= '<div class="row">';
+    $content .= '<div class="col-sm-12">';
+    $content .= '<button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> ' . rex_i18n::msg('poll_sample_install_button') . '</button>';
+    $content .= '</div>';
+    $content .= '</div>';
+    $content .= '</form>';
     
     $content .= '</div>';
     $content .= '</div>';
