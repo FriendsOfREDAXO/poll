@@ -1,0 +1,101 @@
+{
+  "title": "Batman vs Superman vs Wonder Woman",
+  "description": "Wer ist euer liebster Superheld? Stimmt ab für euren Favoriten!",
+  "type": "direct",
+  "status": 1,
+  "comment": 0,
+  "showresult": 1,
+  "questions": [
+    {
+      "title": "Wer ist euer liebster Superheld?",
+      "description": "Wählt aus den drei beliebtesten DC-Superhelden",
+      "media": "",
+      "url": "",
+      "choices": [
+        {
+          "title": "Batman - Der dunkle Ritter"
+        },
+        {
+          "title": "Superman - Der Mann aus Stahl"
+        },
+        {
+          "title": "Wonder Woman - Die Amazonin"
+        }
+      ]
+    }
+  ],
+  "sample_votes": [
+    {
+      "user_hash": "sample_user_001",
+      "choice_index": 0,
+      "create_datetime": "2024-01-15 10:30:00",
+      "comment": "Batman ist einfach der coolste Superheld!"
+    },
+    {
+      "user_hash": "sample_user_002", 
+      "choice_index": 0,
+      "create_datetime": "2024-01-15 11:15:00",
+      "comment": ""
+    },
+    {
+      "user_hash": "sample_user_003",
+      "choice_index": 1,
+      "create_datetime": "2024-01-15 12:00:00",
+      "comment": "Superman rettet die Welt!"
+    },
+    {
+      "user_hash": "sample_user_004",
+      "choice_index": 0,
+      "create_datetime": "2024-01-15 14:20:00",
+      "comment": ""
+    },
+    {
+      "user_hash": "sample_user_005",
+      "choice_index": 2,
+      "create_datetime": "2024-01-15 15:45:00",
+      "comment": "Wonder Woman ist eine starke Heldin!"
+    },
+    {
+      "user_hash": "sample_user_006",
+      "choice_index": 0,
+      "create_datetime": "2024-01-15 16:30:00",
+      "comment": ""
+    },
+    {
+      "user_hash": "sample_user_007",
+      "choice_index": 1,
+      "create_datetime": "2024-01-16 09:10:00",
+      "comment": ""
+    },
+    {
+      "user_hash": "sample_user_008",
+      "choice_index": 0,
+      "create_datetime": "2024-01-16 10:25:00",
+      "comment": "Gotham braucht Batman!"
+    },
+    {
+      "user_hash": "sample_user_009",
+      "choice_index": 2,
+      "create_datetime": "2024-01-16 11:40:00",
+      "comment": ""
+    },
+    {
+      "user_hash": "sample_user_010",
+      "choice_index": 1,
+      "create_datetime": "2024-01-16 13:55:00",
+      "comment": "Kein Superheld ist stärker als Superman!"
+    },
+    {
+      "user_hash": "sample_user_011",
+      "choice_index": 0,
+      "create_datetime": "2024-01-16 15:20:00",
+      "comment": ""
+    },
+    {
+      "user_hash": "sample_user_012",
+      "choice_index": 2,
+      "create_datetime": "2024-01-16 17:35:00",
+      "comment": "Wonder Woman für immer!"
+    }
+  ]
+}

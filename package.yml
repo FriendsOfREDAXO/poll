@@ -11,6 +11,7 @@ page:
     perm: poll[]
     subpages:
         dashboard: { title: 'translate:poll_dashboard' }
+        sample: { title: 'translate:poll_sample_data' }
 
 requires:
     packages:

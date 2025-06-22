@@ -54,3 +54,17 @@ poll_validate_email = Por favor, introduzca una dirección de email válida
 poll_validate_option = Por favor elige una opción
 
 statistics = Estadística
+
+# Sample Data Language Variables  
+poll_sample_data = Datos de Ejemplo
+poll_sample_data_info = Instalar Encuesta de Ejemplo
+poll_sample_data_description = Instala una encuesta de ejemplo "Batman vs Superman vs Wonder Woman" para entender mejor y probar el sistema.
+poll_sample_preview = Vista Previa de la Encuesta de Ejemplo
+poll_sample_install_button = Instalar Encuesta de Ejemplo
+poll_sample_installed_success = ¡La encuesta de ejemplo se ha instalado con éxito!
+poll_sample_install_error = Error al instalar la encuesta de ejemplo
+poll_sample_already_exists = Ya existe una encuesta con este título
+poll_sample_already_installed = Encuesta de ejemplo ya instalada
+poll_sample_already_installed_desc = La encuesta de ejemplo ya ha sido instalada. Puedes editarla o eliminarla en la gestión de YForm.
+poll_sample_votes = Votos de Ejemplo
+poll_sample_votes_count = votos incluidos
