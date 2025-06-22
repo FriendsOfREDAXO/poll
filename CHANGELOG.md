@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 2.0.0 (29.04.2025)
+## Version 2.0.0 (29.04.2025 - 22.06.2025)
 - Pro Umfrage können mehrere Fragen gestellt werden
 - Fragen können auch per Texteingabe vom Benutzer beantwortet werden (keine Auswahloptionen erstellen)
 - Die Statistik wurde durch ein Dashboard ersetzt
