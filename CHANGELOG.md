@@ -6,6 +6,7 @@
 - Die Statistik wurde durch ein Dashboard ersetzt
 - Optimierungen für PHP >= 8.1
 - Readme aktualisiert
+- Demodaten, siehe Dashboard
 
 ## Version 1.4.3 (29.03.2022)
 * Fix for YForm 4 
