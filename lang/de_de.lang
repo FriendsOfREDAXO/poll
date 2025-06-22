@@ -113,3 +113,5 @@ poll_sample_install_error = Fehler beim Installieren der Beispiel-Umfrage
 poll_sample_already_exists = Eine Umfrage mit diesem Titel existiert bereits
 poll_sample_already_installed = Beispiel-Umfrage bereits installiert
 poll_sample_already_installed_desc = Die Beispiel-Umfrage wurde bereits installiert. Du kannst sie in der YForm-Verwaltung bearbeiten oder löschen.
+poll_sample_votes = Beispiel-Stimmen
+poll_sample_votes_count = Stimmen enthalten

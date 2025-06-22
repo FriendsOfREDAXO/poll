@@ -102,3 +102,5 @@ poll_sample_install_error = Error installing the sample poll
 poll_sample_already_exists = A poll with this title already exists
 poll_sample_already_installed = Sample poll already installed
 poll_sample_already_installed_desc = The sample poll has already been installed. You can edit or delete it in the YForm management.
+poll_sample_votes = Sample Votes
+poll_sample_votes_count = votes included

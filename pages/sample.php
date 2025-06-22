@@ -8,6 +8,8 @@
 use Poll\Poll;
 use Poll\Question;
 use Poll\Question\Choice;
+use Poll\Vote;
+use Poll\Vote\Answer;
 
 // Title of the page
 echo rex_view::title($this->i18n('poll') . ' - ' . $this->i18n('poll_sample_data'));
@@ -45,6 +47,7 @@ if (rex_post('install_sample', 'boolean') && rex_csrf_token::factory('poll-sampl
             }
             
             // Create questions and choices
+            $choiceIds = [];
             foreach ($sampleData['questions'] as $questionData) {
                 $question = Question::create();
                 $question->poll_id = $poll->getId();
@@ -57,14 +60,45 @@ if (rex_post('install_sample', 'boolean') && rex_csrf_token::factory('poll-sampl
                     throw new Exception('Could not save question');
                 }
                 
-                // Create choices
-                foreach ($questionData['choices'] as $choiceData) {
+                // Create choices and store their IDs
+                foreach ($questionData['choices'] as $index => $choiceData) {
                     $choice = Choice::create();
                     $choice->question_id = $question->getId();
                     $choice->title = $choiceData['title'];
                     
                     if (!$choice->save()) {
                         throw new Exception('Could not save choice');
+                    }
+                    
+                    $choiceIds[$index] = $choice->getId();
+                }
+                
+                // Create sample votes if provided
+                if (isset($sampleData['sample_votes']) && !empty($sampleData['sample_votes'])) {
+                    foreach ($sampleData['sample_votes'] as $voteData) {
+                        // Create vote
+                        $vote = Vote::create();
+                        $vote->status = 1;
+                        $vote->poll_id = $poll->getId();
+                        $vote->create_datetime = $voteData['create_datetime'];
+                        $vote->user_hash = $voteData['user_hash'];
+                        $vote->comment = $voteData['comment'];
+                        
+                        if (!$vote->save()) {
+                            throw new Exception('Could not save vote');
+                        }
+                        
+                        // Create answer for this vote
+                        $answer = Answer::create();
+                        $answer->vote_id = $vote->getId();
+                        $answer->question_id = $question->getId();
+                        $answer->question_choice_id = $choiceIds[$voteData['choice_index']];
+                        $answer->text = $voteData['comment'];
+                        $answer->create_datetime = $voteData['create_datetime'];
+                        
+                        if (!$answer->save()) {
+                            throw new Exception('Could not save answer');
+                        }
                     }
                 }
             }
@@ -120,6 +154,29 @@ if ($existingPoll) {
             $content .= '<li>' . rex_escape($choice['title']) . '</li>';
         }
         $content .= '</ul>';
+        
+        // Show sample votes info
+        if (isset($sampleData['sample_votes']) && !empty($sampleData['sample_votes'])) {
+            $content .= '<p><strong>' . rex_i18n::msg('poll_sample_votes') . ':</strong> ' . count($sampleData['sample_votes']) . ' ' . rex_i18n::msg('poll_sample_votes_count') . '</p>';
+            
+            // Count votes per choice
+            $voteCounts = [];
+            foreach ($sampleData['sample_votes'] as $vote) {
+                $choiceIndex = $vote['choice_index'];
+                if (!isset($voteCounts[$choiceIndex])) {
+                    $voteCounts[$choiceIndex] = 0;
+                }
+                $voteCounts[$choiceIndex]++;
+            }
+            
+            $content .= '<div style="margin-top: 10px;"><small>';
+            foreach ($sampleData['questions'][0]['choices'] as $index => $choice) {
+                $count = isset($voteCounts[$index]) ? $voteCounts[$index] : 0;
+                $content .= '<div>' . rex_escape($choice['title']) . ': ' . $count . ' ' . rex_i18n::msg('poll_votes') . '</div>';
+            }
+            $content .= '</small></div>';
+        }
+        
         $content .= '</div>';
         $content .= '</div>';
     }

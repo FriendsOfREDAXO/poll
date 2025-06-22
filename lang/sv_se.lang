@@ -68,3 +68,5 @@ poll_sample_install_error = Fel vid installation av exempelenkät
 poll_sample_already_exists = En enkät med denna titel finns redan
 poll_sample_already_installed = Exempelenkät redan installerad
 poll_sample_already_installed_desc = Exempelenkäten har redan installerats. Du kan redigera eller ta bort den i YForm-hanteringen.
+poll_sample_votes = Exempelröster
+poll_sample_votes_count = röster inkluderade
