@@ -3,10 +3,10 @@
 if (rex::isBackend()) {
     rex_extension::register('PACKAGES_INCLUDED', function ($params) {
 
-        $plugin = rex_plugin::get('yform', 'manager');
+        $addon = rex_addon::get('yform');
 
-        if ($plugin) {
-            $pages = $plugin->getProperty('pages');
+        if ($addon) {
+            $pages = $addon->getProperty('pages');
             $ycom_tables = ['rex_poll', 'rex_poll_question', 'rex_poll_question_choice', 'rex_poll_vote', 'rex_poll_vote_answer'];
 
             if (isset($pages) && is_array($pages)) {
