@@ -15,7 +15,7 @@ page:
 
 requires:
     packages:
-        yform: '>4'
+        yform: '>=5.0.0-beta1'
     redaxo: '^5.16.1'
     php:
         version: '>=8.1, <9'
