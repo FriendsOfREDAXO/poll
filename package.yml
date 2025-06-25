@@ -1,5 +1,5 @@
 package: poll
-version: '2.0.0'
+version: '2.0.1'
 author: Friends Of REDAXO
 supportpage: https://github.com/friendsofredaxo/poll
 
@@ -15,7 +15,7 @@ page:
 
 requires:
     packages:
-        yform: '>4'
+        yform: '>=5.0.0-beta1'
     redaxo: '^5.16.1'
     php:
         version: '>=8.1, <9'
