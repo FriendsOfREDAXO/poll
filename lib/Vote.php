@@ -1,8 +1,10 @@
 <?php
 
-namespace Poll;
+namespace FriendsOfRedaxo\Poll;
 
-class Vote extends \rex_yform_manager_dataset
+use rex_yform_manager_dataset;
+
+class Vote extends rex_yform_manager_dataset
 {
     public function activate(): bool
     {

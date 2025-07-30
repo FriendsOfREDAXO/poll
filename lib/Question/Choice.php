@@ -1,14 +1,17 @@
 <?php
 
-namespace Poll\Question;
+namespace FriendsOfRedaxo\Poll\Question;
 
-use Poll\Question;
-use Poll\Vote\Answer;
+use FriendsOfRedaxo\Poll\Question;
+use FriendsOfRedaxo\Poll\Vote\Answer;
+use rex_yform_manager_dataset;
 
-class Choice extends \rex_yform_manager_dataset
+use function count;
+
+class Choice extends rex_yform_manager_dataset
 {
     /**
-     * @return \rex_yform_manager_dataset|Question
+     * @return rex_yform_manager_dataset|Question
      */
     public function getQuestion()
     {

@@ -1,8 +1,11 @@
 <?php
 
-namespace Poll;
+namespace FriendsOfRedaxo\Poll;
 
-class User extends \rex_yform_manager_dataset
+use rex_request;
+use rex_yform_manager_dataset;
+
+class User extends rex_yform_manager_dataset
 {
     public static function getVote(Poll $poll, $hash)
     {
@@ -22,6 +25,9 @@ class User extends \rex_yform_manager_dataset
         if ('' != $salt) {
             return sha1($salt);
         }
-        return sha1($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR']);
+        return sha1(
+            rex_request::server('HTTP_USER_AGENT', 'string', '') .
+            rex_request::server('REMOTE_ADDR', 'string', ''),
+        );
     }
 }

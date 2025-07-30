@@ -1,6 +1,6 @@
 <?php
 
-use Poll\Poll;
+use FriendsOfRedaxo\Poll\Poll;
 
 /** @var Poll[] $polls */
 $polls = Poll::getAll();

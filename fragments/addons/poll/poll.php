@@ -1,7 +1,7 @@
 <?php
 
-use Poll\Poll;
-use Poll\User;
+use FriendsOfRedaxo\Poll\Poll;
+use FriendsOfRedaxo\Poll\User;
 
 /** @var Poll $poll */
 $poll = $this->poll;

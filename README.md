@@ -45,6 +45,8 @@ Hier ist ein Beispiel für ein einfaches Poll-Modul:
 
 ```php
 <?php
+use FriendsOfRedaxo\Poll;
+
 // Eingabe
 ?>
 <div class="form-group">
@@ -57,7 +59,7 @@ Hier ist ein Beispiel für ein einfaches Poll-Modul:
     $select->setAttribute('class', 'form-control');
     $select->addOption('Bitte wählen', '');
 
-    $polls = Poll\Poll::query()->where('status', 1)->orderBy('title')->find();
+    $polls = Poll::query()->where('status', 1)->orderBy('title')->find();
     
     foreach ($polls as $poll) {
         $select->addOption($poll->getTitle(), $poll->getId());
@@ -73,7 +75,7 @@ Hier ist ein Beispiel für ein einfaches Poll-Modul:
 <div class="poll-container">
     <?php
     if ('REX_VALUE[1]' != '') {
-        $poll = Poll\Poll::get(intval('REX_VALUE[1]'));
+        $poll = Poll::get(intval('REX_VALUE[1]'));
         if ($poll) {
             $fragment = new rex_fragment();
             $fragment->setVar('poll', $poll);
