@@ -1,17 +1,16 @@
 <?php
+
 /**
- * Dashboard für Umfrage-Auswertungen
+ * Dashboard für Umfrage-Auswertungen.
  *
  * @package poll
  */
 
-use Poll\Poll;
-use Poll\Vote;
-use Poll\Vote\Answer;
+use FriendsOfRedaxo\Poll\Poll;
+use FriendsOfRedaxo\Poll\Vote;
 
 // Titel der Seite
 echo rex_view::title($this->i18n('poll') . ' - Dashboard');
-
 
 // CSS für animiertes Symbol
 echo '
@@ -59,9 +58,9 @@ foreach ($polls as $poll) {
     $pollLabels[] = $statusIcon . $poll->getTitle();
     $pollVotes[] = $poll->getHits();
     $pollStatus[] = $poll->isOnline(); // Status speichern für spätere Verwendung
-    
+
     // Farbe für jede Umfrage
-    $pollColors[] = 'rgba(' . mt_rand(0, 150) . ',' . mt_rand(0, 150) . ',' . mt_rand(150, 255) . ', 0.6)';
+    $pollColors[] = 'rgba(' . random_int(0, 150) . ',' . random_int(0, 150) . ',' . random_int(150, 255) . ', 0.6)';
 }
 
 // Aktivitätsdaten für Timeline sammeln
@@ -69,20 +68,20 @@ $activityData = [];
 $activityDates = [];
 
 // Votes nach Datum gruppieren (letzte 30 Tage)
-$query = "
-    SELECT 
-        DATE(create_datetime) as vote_date, 
-        COUNT(*) as vote_count 
-    FROM 
-        " . rex::getTablePrefix() . "poll_vote
-    WHERE 
+$query = '
+    SELECT
+        DATE(create_datetime) as vote_date,
+        COUNT(*) as vote_count
+    FROM
+        ' . rex::getTablePrefix() . 'poll_vote
+    WHERE
         status = 1
         AND create_datetime >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-    GROUP BY 
+    GROUP BY
         DATE(create_datetime)
-    ORDER BY 
+    ORDER BY
         vote_date ASC
-";
+';
 
 $result = rex_sql::factory()->setQuery($query);
 $votesByDate = $result->getArray();
@@ -96,19 +95,19 @@ $currentDate = clone $startDate;
 while ($currentDate <= $endDate) {
     $dateString = $currentDate->format('Y-m-d');
     $formattedDate = $currentDate->format('d.m.Y');
-    
+
     // Prüfen ob es für dieses Datum Votes gibt
     $voteCount = 0;
     foreach ($votesByDate as $vote) {
         if ($vote['vote_date'] === $dateString) {
-            $voteCount = (int)$vote['vote_count'];
+            $voteCount = (int) $vote['vote_count'];
             break;
         }
     }
-    
+
     $activityData[] = $voteCount;
     $activityDates[] = $formattedDate;
-    
+
     $currentDate->modify('+1 day');
 }
 
@@ -136,9 +135,9 @@ $content .= '
 <div class="poll-card">
     <div class="poll-card-header"><i class="fa fa-bar-chart"></i> ' . rex_i18n::msg('poll_dashboard_votes_per_poll') . '</div>
     <div class="poll-card-body">
-        <div id="poll-overview-chart" class="poll-bar-chart" 
-            data-values=\'' . json_encode($pollVotes) . '\' 
-            data-labels=\'' . json_encode($pollLabels) . '\' 
+        <div id="poll-overview-chart" class="poll-bar-chart"
+            data-values=\'' . json_encode($pollVotes) . '\'
+            data-labels=\'' . json_encode($pollLabels) . '\'
             data-colors=\'' . json_encode($pollColors) . '\'></div>
     </div>
 </div>';
@@ -157,7 +156,7 @@ $i = 0;
 foreach ($polls as $poll) {
     $status_icon = $pollStatus[$i] ? '<i class="fa fa-circle poll-active-icon"></i> ' : '<i class="fa fa-circle-o poll-inactive-icon"></i> ';
     $content .= '<option value="poll-detail-' . $poll->getId() . '">' . $status_icon . $poll->getTitle() . ' (' . $poll->getHits() . ' ' . rex_i18n::msg('poll_votes') . ')</option>';
-    $i++;
+    ++$i;
 }
 $content .= '</select>';
 $content .= '</div>';
@@ -166,24 +165,24 @@ $content .= '</div>';
 $i = 0;
 foreach ($polls as $poll) {
     $statistics = $poll->getStatistics();
-    
+
     $content .= '<div id="poll-detail-' . $poll->getId() . '" class="poll-details" style="display:none;">';
-    $status_display = $pollStatus[$i] ? 
-        '<span class="poll-status active"><i class="fa fa-circle poll-active-icon"></i> ' . rex_i18n::msg('poll_status_active') . '</span>' : 
+    $status_display = $pollStatus[$i] ?
+        '<span class="poll-status active"><i class="fa fa-circle poll-active-icon"></i> ' . rex_i18n::msg('poll_status_active') . '</span>' :
         '<span class="poll-status inactive"><i class="fa fa-circle-o poll-inactive-icon"></i> ' . rex_i18n::msg('poll_status_inactive') . '</span>';
     $content .= '<h3>' . $poll->getTitle() . ' ' . $status_display . '</h3>';
     $content .= '<p>' . $poll->getDescription() . '</p>';
-    $i++;
-    
+    ++$i;
+
     // Für jede Frage in der Umfrage
     foreach ($statistics['questions'] as $questionIndex => $question) {
         $content .= '<div class="poll-question">';
         $content .= '<h4>' . $question['title'] . '</h4>';
-        
+
         // Wenn die Frage Auswahlmöglichkeiten hat
         if (isset($question['choices']) && !empty($question['choices'])) {
             $content .= '<div class="poll-question-results">';
-            
+
             // Tabellendarstellung
             $content .= '<div class="poll-question-table">';
             $content .= '<table class="poll-results-table">';
@@ -193,45 +192,45 @@ foreach ($polls as $poll) {
             $content .= '<th class="poll-percentage-col">' . rex_i18n::msg('poll_percentage') . '</th>';
             $content .= '</tr></thead>';
             $content .= '<tbody>';
-            
+
             $choiceLabels = [];
             $choiceCounts = [];
             $choiceColors = [];
-            
+
             foreach ($question['choices'] as $choice) {
                 $content .= '<tr>';
                 $content .= '<td class="poll-option-col">' . $choice['title'] . '</td>';
                 $content .= '<td class="poll-votes-col">' . $choice['count'] . '</td>';
                 $content .= '<td class="poll-percentage-col">';
-                
+
                 // Prozentangabe mit Fortschrittsbalken darstellen
                 $content .= '<div class="poll-percentage-bar">';
                 $content .= '<div class="poll-percentage-fill" style="width: ' . $choice['percentage'] . '%;"></div>';
                 $content .= '<span class="poll-percentage-text">' . $choice['percentage'] . '%</span>';
                 $content .= '</div>';
-                
+
                 $content .= '</td>';
                 $content .= '</tr>';
-                
+
                 $choiceLabels[] = $choice['title'];
                 $choiceCounts[] = $choice['count'];
-                $choiceColors[] = 'rgba(' . mt_rand(0, 150) . ',' . mt_rand(0, 150) . ',' . mt_rand(150, 255) . ', 0.6)';
+                $choiceColors[] = 'rgba(' . random_int(0, 150) . ',' . random_int(0, 150) . ',' . random_int(150, 255) . ', 0.6)';
             }
-            
+
             $content .= '</tbody>';
             $content .= '</table>';
             $content .= '</div>';
-            
+
             // Statt Kreisdiagramm direkt anzuzeigen, Button zur Modal-Anzeige einfügen
-            $chartId = "chart-modal-" . $poll->getId() . "-" . $question['id'];
-            $chartModalId = "modal-" . $chartId;
-            
+            $chartId = 'chart-modal-' . $poll->getId() . '-' . $question['id'];
+            $chartModalId = 'modal-' . $chartId;
+
             // Button für die Diagramm-Anzeige
             $content .= '<div class="poll-question-chart-button">';
             $content .= '<button class="btn btn-default" data-toggle="modal" data-target="#' . $chartModalId . '">';
             $content .= '<i class="fa fa-pie-chart"></i> ' . rex_i18n::msg('poll_show_chart') . '</button>';
             $content .= '</div>';
-            
+
             // Modal für das Kreisdiagramm
             $content .= '<div class="modal fade" id="' . $chartModalId . '" tabindex="-1" role="dialog">';
             $content .= '<div class="modal-dialog modal-lg" role="document">'; // Größeres Modal verwenden
@@ -241,9 +240,9 @@ foreach ($polls as $poll) {
             $content .= '<h4 class="modal-title">' . $question['title'] . '</h4>';
             $content .= '</div>';
             $content .= '<div class="modal-body" style="padding: 20px; text-align: center;">'; // Mehr Padding und zentrieren
-            $content .= '<div id="' . $chartId . '" class="poll-pie-chart" 
-                data-values=\'' . json_encode($choiceCounts) . '\' 
-                data-labels=\'' . json_encode($choiceLabels) . '\' 
+            $content .= '<div id="' . $chartId . '" class="poll-pie-chart"
+                data-values=\'' . json_encode($choiceCounts) . '\'
+                data-labels=\'' . json_encode($choiceLabels) . '\'
                 data-colors=\'' . json_encode($choiceColors) . '\'></div>';
             $content .= '</div>';
             $content .= '<div class="modal-footer">';
@@ -252,14 +251,14 @@ foreach ($polls as $poll) {
             $content .= '</div>';
             $content .= '</div>';
             $content .= '</div>';
-            
+
             $content .= '</div>'; // Ende poll-question-results
-        } 
+        }
         // Für Freitext-Fragen
         elseif (isset($question['text_answers'])) {
             $content .= '<div class="text-answers">';
             $content .= '<h5>' . rex_i18n::msg('poll_text_responses') . ' (' . count($question['text_answers']) . ')</h5>';
-            
+
             if (!empty($question['text_answers'])) {
                 $content .= '<div class="poll-text-answers">';
                 foreach ($question['text_answers'] as $textAnswer) {
@@ -269,13 +268,13 @@ foreach ($polls as $poll) {
             } else {
                 $content .= '<p>' . rex_i18n::msg('poll_no_text_responses') . '</p>';
             }
-            
+
             $content .= '</div>';
         }
-        
+
         $content .= '</div>'; // Ende poll-question
     }
-    
+
     $content .= '</div>'; // Ende poll-details
 }
 
@@ -290,11 +289,11 @@ $content .= '
 <script nonce="$nonce">
 $(document).ready(function() {
     var selector = $("#poll-selector");
-    
+
     // Füge HTML-Inhalte für das Dropdown hinzu
     selector.html(selector.html().replace(/&lt;i class="fa/g, "<i class=\"fa")
                                  .replace(/&lt;\/i&gt;/g, "</i>"));
-    
+
     // Event Listener für Dropdown-Auswahl
     selector.on("change", function() {
         var selectedId = $(this).val();

@@ -3,7 +3,7 @@
  * module:poll_basic_output v2.0.0
  */
 
-use Poll\Poll;
+use FriendsOfRedaxo\Poll\Poll;
 
 $pollId = (int) 'REX_VALUE[1]';
 

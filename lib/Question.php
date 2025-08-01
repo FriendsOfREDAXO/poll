@@ -1,31 +1,34 @@
 <?php
 
-namespace Poll;
+namespace FriendsOfRedaxo\Poll;
 
-use Poll\Question\Choice;
-use Poll\Vote\Answer;
+use FriendsOfRedaxo\Poll\Question\Choice;
+use FriendsOfRedaxo\Poll\Vote\Answer;
+use rex_yform_manager_collection;
+use rex_yform_manager_dataset;
 
-class Question extends \rex_yform_manager_dataset
+use function count;
+
+class Question extends rex_yform_manager_dataset
 {
     /**
-     * @param \rex_yform_manager_collection $items
-     *
-     * @return \rex_yform_manager_collection
+     * @return rex_yform_manager_collection
      */
-    public static function populateChoices(\rex_yform_manager_collection $items)
+    public static function populateChoices(rex_yform_manager_collection $items)
     {
         return $items->populateRelation('choices');
     }
 
     /**
-     * @return \rex_yform_manager_collection|Choice[]
+     * @return rex_yform_manager_collection<Choice>|array<Choice>
      */
     public function getChoices()
     {
         return $this->getRelatedCollection('choices');
     }
+
     /**
-     * @return \rex_yform_manager_dataset|Poll
+     * @return rex_yform_manager_dataset|Poll
      */
     public function getPoll()
     {
@@ -65,7 +68,7 @@ class Question extends \rex_yform_manager_dataset
         return count($hits);
     }
 
-    public function getAnswers(): \rex_yform_manager_collection
+    public function getAnswers(): rex_yform_manager_collection
     {
         return Answer::query()
             ->alias('a')
