@@ -1,6 +1,6 @@
 # Changelog
 
-## Version x.x.x (.....)
+## Version 2.1.0 (01.08.2025)
 
 - Umstellung vom Namespace `Poll` auf den Namespace `FriendsOfRedaxo\Poll`
 
